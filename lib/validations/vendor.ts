@@ -33,10 +33,10 @@ export const vendorOnboardingSchema = z.object({
     'Pet Supplies',
     'Other',
   ], {
-    required_error: 'Please select a business category',
+    message: 'Please select a business category',
   }),
   acceptTerms: z.literal(true, {
-    errorMap: () => ({ message: 'You must accept the terms and conditions' }),
+    message: 'You must accept the terms and conditions',
   }),
 });
 
