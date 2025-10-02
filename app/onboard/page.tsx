@@ -41,9 +41,10 @@ export default function OnboardPage() {
       });
 
       setSubmitSuccess(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(
-        error.response?.data?.message || "Failed to submit onboarding request. Please try again."
+        err.response?.data?.message || "Failed to submit onboarding request. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -79,7 +80,7 @@ export default function OnboardPage() {
               Thank you for your interest in becoming a Street London partner.
             </p>
             <p className="text-lg text-gray-400 mb-8">
-              We've sent you an email with next steps to complete your onboarding. Please check your
+              We&apos;ve sent you an email with next steps to complete your onboarding. Please check your
               inbox and follow the instructions to install the Street London app on your Shopify
               store.
             </p>
@@ -319,7 +320,7 @@ export default function OnboardPage() {
                 className="mt-1 mr-3 h-4 w-4 bg-gray-900 border-gray-800 rounded focus:ring-street-lime"
               />
               <label htmlFor="acceptTerms" className="text-sm text-gray-400">
-                I accept the terms and conditions and agree to Street London's vendor policies *
+                I accept the terms and conditions and agree to Street London&apos;s vendor policies *
               </label>
             </div>
             {errors.acceptTerms && (
