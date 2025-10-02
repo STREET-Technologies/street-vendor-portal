@@ -1,26 +1,36 @@
 @import "tailwindcss";
 
+/* Street London Custom Font */
+@font-face {
+  font-family: 'Hanson Bold';
+  src: url('/fonts/Hanson-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
+  --street-lime: #c6ff00;
+  --street-black: #000000;
+  --street-white: #ffffff;
+  --street-gray: #a4a3a8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-street-lime: var(--street-lime);
+  --color-street-black: var(--street-black);
+  --color-street-white: var(--street-white);
+  --color-street-gray: var(--street-gray);
+  --font-hanson: 'Hanson Bold', sans-serif;
+  --font-barlow: 'Barlow', sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Barlow', Arial, Helvetica, sans-serif;
 }
