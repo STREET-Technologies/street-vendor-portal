@@ -320,7 +320,25 @@ export default function OnboardPage() {
                 className="mt-1 mr-3 h-4 w-4 bg-gray-900 border-gray-800 rounded focus:ring-street-lime"
               />
               <label htmlFor="acceptTerms" className="text-sm text-gray-400">
-                I accept the terms and conditions and agree to Street London&apos;s vendor policies *
+                I accept the{" "}
+                <a
+                  href="https://street.london/user-terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-street-lime hover:underline"
+                >
+                  terms and conditions
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://street.london/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-street-lime hover:underline"
+                >
+                  privacy policy
+                </a>{" "}
+                and agree to Street London&apos;s vendor policies *
               </label>
             </div>
             {errors.acceptTerms && (
