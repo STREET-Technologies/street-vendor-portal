@@ -37,6 +37,7 @@ export default function OnboardPage() {
         country: data.country,
         postcode: data.postcode,
         storeUrl: data.storeUrl,
+        vendorType: data.vendorType,
         vendorCategory: data.vendorCategory,
       });
 
@@ -208,7 +209,7 @@ export default function OnboardPage() {
                 id="phone"
                 type="tel"
                 className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="+44 20 1234 5678"
+                placeholder="+442012345678"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
             </div>
@@ -308,6 +309,28 @@ export default function OnboardPage() {
               </select>
               {errors.vendorCategory && (
                 <p className="text-red-500 text-sm mt-1">{errors.vendorCategory.message}</p>
+              )}
+            </div>
+
+            {/* Vendor Type */}
+            <div>
+              <label htmlFor="vendorType" className="block text-sm font-bold mb-2">
+                Platform Type *
+              </label>
+              <select
+                {...register("vendorType")}
+                id="vendorType"
+                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
+              >
+                <option value="">Select your platform</option>
+                <option value="shopify">Shopify</option>
+                <option value="woocommerce">WooCommerce</option>
+                <option value="magento">Magento</option>
+                <option value="custom">Custom Platform</option>
+                <option value="other">Other</option>
+              </select>
+              {errors.vendorType && (
+                <p className="text-red-500 text-sm mt-1">{errors.vendorType.message}</p>
               )}
             </div>
 

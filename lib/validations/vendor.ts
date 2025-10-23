@@ -15,10 +15,13 @@ export const vendorOnboardingSchema = z.object({
   phone: z
     .string()
     .min(10, 'Phone number is required')
-    .regex(/^\+?[\d\s-()]+$/, 'Invalid phone number format'),
+    .regex(/^\+\d{1,3}\d{9,14}$/, 'Phone number must be in international format, e.g., +13124567890'),
   country: z.string().min(2, 'Country is required'),
   postcode: z.string().optional(),
   address: z.string().min(5, 'Address is required'),
+  vendorType: z.enum(['shopify', 'woocommerce', 'magento', 'custom', 'other'], {
+    message: 'Please select a vendor type',
+  }),
   vendorCategory: z.enum([
     'Fashion',
     'Beauty',
