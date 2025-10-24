@@ -295,16 +295,17 @@ export default function OnboardPage() {
               >
                 <option value="">Select a category</option>
                 <option value="Fashion">Fashion</option>
-                <option value="Beauty">Beauty & Cosmetics</option>
+                <option value="Beauty">Beauty</option>
                 <option value="Electronics">Electronics</option>
-                <option value="Home">Home & Garden</option>
-                <option value="Sports">Sports & Outdoors</option>
-                <option value="Books">Books & Media</option>
-                <option value="Toys">Toys & Games</option>
-                <option value="Food">Food & Beverage</option>
-                <option value="Health">Health & Wellness</option>
-                <option value="Jewelry">Jewelry & Accessories</option>
-                <option value="Art">Art & Collectibles</option>
+                <option value="Home & Living">Home & Living</option>
+                <option value="Food & Beverage">Food & Beverage</option>
+                <option value="Sports & Outdoors">Sports & Outdoors</option>
+                <option value="Books & Media">Books & Media</option>
+                <option value="Toys & Games">Toys & Games</option>
+                <option value="Kids / Babywear">Kids / Babywear</option>
+                <option value="Health & Wellness">Health & Wellness</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Pet Supplies">Pet Supplies</option>
                 <option value="Other">Other</option>
               </select>
               {errors.vendorCategory && (

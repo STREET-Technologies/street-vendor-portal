@@ -31,6 +31,7 @@ export const vendorOnboardingSchema = z.object({
     'Sports & Outdoors',
     'Books & Media',
     'Toys & Games',
+    'Kids / Babywear',
     'Health & Wellness',
     'Automotive',
     'Pet Supplies',
