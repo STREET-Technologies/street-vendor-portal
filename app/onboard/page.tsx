@@ -11,7 +11,6 @@ import { Loader2 } from "lucide-react";
 
 export default function OnboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -27,7 +26,7 @@ export default function OnboardPage() {
     setSubmitError(null);
 
     try {
-      await apiClient.post("/vendors/onboard", {
+      const response = await apiClient.post("/vendors/onboard", {
         storeName: data.storeName,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -41,7 +40,9 @@ export default function OnboardPage() {
         vendorCategory: data.vendorCategory,
       });
 
-      setSubmitSuccess(true);
+      // Redirect to change-password with pre-filled email and temp password
+      const { email, tempPassword } = response.data.data;
+      window.location.href = `/change-password?email=${encodeURIComponent(email)}&temp=${encodeURIComponent(tempPassword)}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(
@@ -51,51 +52,6 @@ export default function OnboardPage() {
       setIsSubmitting(false);
     }
   };
-
-  if (submitSuccess) {
-    return (
-      <div className="min-h-screen bg-black text-white">
-        <header className="border-b border-gray-800">
-          <div className="container mx-auto px-4 py-6">
-            <Link href="/">
-              <Image
-                src="/img/logo-white-transparent.png"
-                alt="Street London"
-                width={150}
-                height={50}
-                priority
-              />
-            </Link>
-          </div>
-        </header>
-
-        <main className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-2xl mx-auto text-center">
-            <h1
-              className="text-5xl md:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Hanson Bold, sans-serif" }}
-            >
-              SUCCESS!
-            </h1>
-            <p className="text-xl text-street-gray mb-8">
-              Thank you for your interest in becoming a Street London partner.
-            </p>
-            <p className="text-lg text-gray-400 mb-8">
-              We&apos;ve sent you an email with next steps to complete your onboarding. Please check your
-              inbox and follow the instructions to install the Street London app on your Shopify
-              store.
-            </p>
-            <Link
-              href="/"
-              className="inline-block bg-street-lime hover:bg-street-lime/80 text-black font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              Back to Home
-            </Link>
-          </div>
-        </main>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-black text-white">

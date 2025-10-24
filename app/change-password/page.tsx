@@ -28,11 +28,15 @@ function ChangePasswordForm() {
     resolver: zodResolver(changePasswordSchema),
   });
 
-  // Pre-fill email from URL params if provided
+  // Pre-fill email and temp password from URL params if provided
   useEffect(() => {
     const email = searchParams.get('email');
+    const tempPassword = searchParams.get('temp');
     if (email) {
       setValue('email', email);
+    }
+    if (tempPassword) {
+      setValue('tempPassword', tempPassword);
     }
   }, [searchParams, setValue]);
 
