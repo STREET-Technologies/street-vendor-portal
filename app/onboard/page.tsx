@@ -266,17 +266,17 @@ export default function OnboardPage() {
               </div>
             </div>
 
-            {/* Shopify Store URL */}
+            {/* Store URL */}
             <div>
               <label htmlFor="storeUrl" className="block text-sm font-bold mb-2">
-                Shopify Store URL *
+                Store URL *
               </label>
               <input
                 {...register("storeUrl")}
                 id="storeUrl"
                 type="text"
                 className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="yourstore.myshopify.com"
+                placeholder="yourstore.myshopify.com or yourdomain.com"
               />
               {errors.storeUrl && (
                 <p className="text-red-500 text-sm mt-1">{errors.storeUrl.message}</p>

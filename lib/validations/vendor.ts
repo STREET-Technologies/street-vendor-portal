@@ -6,10 +6,10 @@ export const vendorOnboardingSchema = z.object({
   lastName: z.string().min(2, 'Last name is required'),
   storeUrl: z
     .string()
-    .min(1, 'Shopify store URL is required')
+    .min(1, 'Store URL is required')
     .regex(
-      /^[\w-]+\.myshopify\.com$/,
-      'Must be a valid Shopify store URL (e.g., yourstore.myshopify.com)'
+      /^[\w-]+(\.[\w-]+)+$/,
+      'Must be a valid domain (e.g., yourstore.myshopify.com or yourdomain.com)'
     ),
   email: z.string().email('Invalid email address'),
   phone: z
