@@ -51,7 +51,12 @@ function ChangePasswordForm() {
         newPassword: data.newPassword,
       });
 
-      setSubmitSuccess(true);
+      // Redirect to operating hours setup with credentials for auto-login
+      const params = new URLSearchParams({
+        email: data.email,
+        password: data.newPassword,
+      });
+      window.location.href = `/onboard/operating-hours?${params.toString()}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(
