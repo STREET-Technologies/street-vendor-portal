@@ -8,12 +8,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema, type ChangePasswordFormData } from "@/lib/validations/password";
 import { apiClient } from "@/lib/api/client";
-import { Loader2, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 
 function ChangePasswordForm() {
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showTempPassword, setShowTempPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -66,62 +65,6 @@ function ChangePasswordForm() {
       setIsSubmitting(false);
     }
   };
-
-  if (submitSuccess) {
-    return (
-      <div className="min-h-screen bg-black text-white">
-        <header className="border-b border-gray-800">
-          <div className="container mx-auto px-4 py-6">
-            <Link href="/">
-              <Image
-                src="/img/logo-white-transparent.png"
-                alt="Street London"
-                width={150}
-                height={50}
-                priority
-              />
-            </Link>
-          </div>
-        </header>
-
-        <main className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="flex justify-center mb-6">
-              <CheckCircle2 className="w-20 h-20 text-street-lime" />
-            </div>
-            <h1
-              className="text-5xl md:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Hanson Bold, sans-serif" }}
-            >
-              PASSWORD CHANGED!
-            </h1>
-            <p className="text-xl text-street-gray mb-8">
-              Your password has been successfully updated.
-            </p>
-            <p className="text-lg text-gray-400 mb-8">
-              You can now download the Street London Retail App and log in with your new password to start managing your orders.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/"
-                className="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                Back to Home
-              </Link>
-              <a
-                href="https://apps.apple.com/app/street-london"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-street-lime hover:bg-street-lime/80 text-black font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                Download Retail App
-              </a>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-black text-white">

@@ -38,7 +38,7 @@ export default function OnboardingSuccessPage() {
           </p>
 
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-            <h2 className="text-2xl font-bold mb-4">What's Next?</h2>
+            <h2 className="text-2xl font-bold mb-4">What&apos;s Next?</h2>
             <ul className="text-left space-y-3 text-gray-300">
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">1.</span>

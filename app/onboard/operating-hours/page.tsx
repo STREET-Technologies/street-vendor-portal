@@ -209,10 +209,10 @@ function OperatingHoursForm() {
           </div>
 
           <p className="text-lg text-street-gray mb-2">
-            Set your store's operating hours so customers know when you're available.
+            Set your store&apos;s operating hours so customers know when you&apos;re available.
           </p>
           <p className="text-sm text-gray-500 mb-8">
-            Don't worry - you can always update these later in the Street London Retail App.
+            Don&apos;t worry - you can always update these later in the Street London Retail App.
           </p>
 
           {submitError && (
