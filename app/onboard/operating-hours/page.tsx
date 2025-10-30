@@ -60,7 +60,7 @@ function OperatingHoursForm() {
 
     const login = async () => {
       try {
-        const response = await apiClient.post("/auth/login", {
+        const response = await apiClient.post("/auth/vendor/login", {
           email,
           password,
         });
