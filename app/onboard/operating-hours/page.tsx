@@ -66,7 +66,7 @@ function OperatingHoursForm() {
         });
 
         console.log('Login response:', response.data);
-        const token = response.data.access_token || response.data.accessToken;
+        const token = response.data.data?.accessToken || response.data.access_token || response.data.accessToken;
 
         if (!token) {
           console.error('No token in response:', response.data);
