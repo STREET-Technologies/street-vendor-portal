@@ -65,11 +65,22 @@ function OperatingHoursForm() {
           password,
         });
 
-        const token = response.data.access_token;
+        console.log('Login response:', response.data);
+        const token = response.data.access_token || response.data.accessToken;
+
+        if (!token) {
+          console.error('No token in response:', response.data);
+          setLoginError("Authentication failed. No token received.");
+          setIsLoggingIn(false);
+          return;
+        }
+
+        console.log('Token received:', token.substring(0, 20) + '...');
         setAuthToken(token);
         setIsLoggingIn(false);
       } catch (error: unknown) {
         const err = error as { response?: { data?: { message?: string } } };
+        console.error('Login error:', err);
         setLoginError(
           err.response?.data?.message || "Failed to authenticate. Please try logging in manually."
         );
@@ -101,7 +112,11 @@ function OperatingHoursForm() {
   };
 
   const onSubmit = async (data: OperatingHoursFormData) => {
+    console.log('Submit clicked - authToken present:', !!authToken);
+    console.log('Form data:', data);
+
     if (!authToken) {
+      console.error('No auth token available');
       setSubmitError("Authentication required. Please refresh the page.");
       return;
     }
@@ -110,16 +125,20 @@ function OperatingHoursForm() {
     setSubmitError(null);
 
     try {
-      await apiClient.patch("/retailer/vendors/store/opening-hours", data, {
+      console.log('Sending request to /retailer/vendors/store/opening-hours');
+      const response = await apiClient.patch("/retailer/vendors/store/opening-hours", data, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
 
+      console.log('Operating hours saved successfully:', response.data);
+
       // Redirect to success page
       router.push("/onboard/success");
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
+      console.error('Submit error:', err);
       setSubmitError(
         err.response?.data?.message || "Failed to save operating hours. Please try again."
       );
