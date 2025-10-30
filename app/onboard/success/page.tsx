@@ -31,10 +31,10 @@ export default function OnboardingSuccessPage() {
             WELCOME TO STREET!
           </h1>
           <p className="text-xl text-street-gray mb-4">
-            Your account has been successfully set up.
+            Your vendor account has been successfully created!
           </p>
           <p className="text-lg text-gray-400 mb-8">
-            Download the Street London Retail App to start managing your orders, updating products, and growing your business.
+            Check your email for the next steps to connect your store and start selling on Street.
           </p>
 
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
@@ -42,19 +42,19 @@ export default function OnboardingSuccessPage() {
             <ul className="text-left space-y-3 text-gray-300">
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">1.</span>
-                <span>Download the Street London Retail App on your mobile device</span>
+                <span>Check your email for the Shopify app installation link</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">2.</span>
-                <span>Log in with the credentials you just created</span>
+                <span>Install the Shopify app to sync your product catalog to Street</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">3.</span>
-                <span>Start receiving and managing orders from retailers</span>
+                <span>Download the Street app to manage customer orders on the go</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">4.</span>
-                <span>Update your product catalog and inventory in real-time</span>
+                <span>Start receiving orders from customers shopping on Street</span>
               </li>
             </ul>
           </div>
@@ -72,7 +72,7 @@ export default function OnboardingSuccessPage() {
               rel="noopener noreferrer"
               className="inline-block bg-street-lime hover:bg-street-lime/80 text-black font-bold py-3 px-6 rounded-lg transition-colors"
             >
-              Download Retail App
+              Download Street App
             </a>
           </div>
 
