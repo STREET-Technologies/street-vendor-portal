@@ -309,11 +309,6 @@ function OperatingHoursForm() {
                         />
                       </>
                     )}
-                    <input
-                      {...register(`${day}.isClosed`)}
-                      type="hidden"
-                      value={isClosed ? "true" : "false"}
-                    />
                   </div>
 
                   {/* Error Messages */}
