@@ -134,8 +134,12 @@ function OperatingHoursForm() {
 
       console.log('Operating hours saved successfully:', response.data);
 
-      // Redirect to success page
-      router.push("/onboard/success");
+      // Redirect to Stripe Connect setup
+      const params = new URLSearchParams({
+        email: searchParams.get("email") || "",
+        password: searchParams.get("password") || "",
+      });
+      router.push(`/onboard/stripe-connect?${params.toString()}`);
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       console.error('Submit error:', err);
@@ -148,7 +152,11 @@ function OperatingHoursForm() {
   };
 
   const handleSkip = () => {
-    router.push("/onboard/success");
+    const params = new URLSearchParams({
+      email: searchParams.get("email") || "",
+      password: searchParams.get("password") || "",
+    });
+    router.push(`/onboard/stripe-connect?${params.toString()}`);
   };
 
   if (isLoggingIn) {
