@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STREET Retail Integration - Feature Graphic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Street London Hanson Bold Font */
+    @font-face {
+      font-family: 'Hanson Bold';
+      src: url('public/fonts/Hanson-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --street-lime: #c6ff00;
+      --street-black: #000000;
+      --street-white: #ffffff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--street-black);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .graphic-container {
+      width: 1600px;
+      height: 900px;
+      background: var(--street-black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle lime accent corners */
+    .accent-top-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle at top right, rgba(198, 255, 0, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .accent-bottom-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle at bottom left, rgba(198, 255, 0, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Logo */
+    .logo {
+      position: absolute;
+      top: 50px;
+      left: 60px;
+      height: 70px;
+      width: auto;
+    }
+
+    /* Main content */
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 140px;
+    }
+
+    /* Title */
+    .title {
+      font-family: 'Hanson Bold', sans-serif;
+      font-size: 58px;
+      font-weight: bold;
+      color: var(--street-white);
+      margin-bottom: 70px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .title-highlight {
+      color: var(--street-lime);
+    }
+
+    /* Steps */
+    .steps {
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 70px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding: 0 20px;
+    }
+
+    .step-number {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--street-lime);
+      line-height: 1;
+      min-width: 60px;
+    }
+
+    .step-content {
+      padding-top: 8px;
+    }
+
+    .step-text {
+      font-family: 'Barlow', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--street-white);
+      line-height: 1.4;
+    }
+
+    /* Features */
+    .features {
+      display: flex;
+      gap: 80px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .feature {
+      font-family: 'Barlow', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--street-lime);
+      letter-spacing: 0.5px;
+    }
+
+    .feature-separator {
+      font-family: 'Barlow', sans-serif;
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <div class="graphic-container">
+    <!-- Accent gradients -->
+    <div class="accent-top-right"></div>
+    <div class="accent-bottom-left"></div>
+
+    <!-- Logo -->
+    <img src="public/img/logo-white-transparent.png" alt="Street London" class="logo">
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Title -->
+      <h1 class="title">
+        <span class="title-highlight">STREET</span> Retail Integration
+      </h1>
+
+      <!-- Steps -->
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-text">Install app & grant permissions</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-text">Products automatically sync to Street</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-text">Customers access your catalog via our STREET Client App</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-text">Real-time inventory updates</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature">Simple</div>
+        <div class="feature-separator">•</div>
+        <div class="feature">Automatic</div>
+        <div class="feature-separator">•</div>
+        <div class="feature">Secure</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STREET Retail Integration - Feature Graphic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Street London Hanson Bold Font */
+    @font-face {
+      font-family: 'Hanson Bold';
+      src: url('public/fonts/Hanson-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --street-lime: #c6ff00;
+      --street-black: #000000;
+      --street-white: #ffffff;
+      --street-gray: #a4a3a8;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--street-black);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .graphic-container {
+      width: 1600px;
+      height: 900px;
+      background: var(--street-black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle lime accent corners */
+    .accent-top-right {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle at top right, rgba(198, 255, 0, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .accent-bottom-left {
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle at bottom left, rgba(198, 255, 0, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Logo */
+    .logo {
+      position: absolute;
+      top: 40px;
+      left: 50px;
+      height: 60px;
+      width: auto;
+    }
+
+    /* Main content */
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 100px;
+    }
+
+    /* Title */
+    .title {
+      font-family: 'Hanson Bold', sans-serif;
+      font-size: 54px;
+      font-weight: bold;
+      color: var(--street-white);
+      margin-bottom: 16px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .title-highlight {
+      color: var(--street-lime);
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-family: 'Barlow', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--street-gray);
+      text-align: center;
+      margin-bottom: 60px;
+      max-width: 900px;
+      line-height: 1.5;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      width: 100%;
+      max-width: 1300px;
+      margin-bottom: 50px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px solid rgba(198, 255, 0, 0.2);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      background: rgba(198, 255, 0, 0.04);
+      border-color: rgba(198, 255, 0, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px;
+      color: var(--street-lime);
+    }
+
+    .feature-title {
+      font-family: 'Barlow', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--street-white);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .feature-desc {
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--street-gray);
+      line-height: 1.5;
+    }
+
+    /* Bottom tagline */
+    .tagline {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .tagline-item {
+      font-family: 'Barlow', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--street-lime);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .tagline-separator {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="graphic-container">
+    <!-- Accent gradients -->
+    <div class="accent-top-right"></div>
+    <div class="accent-bottom-left"></div>
+
+    <!-- Logo -->
+    <img src="public/img/logo-white-transparent.png" alt="Street London" class="logo">
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Title -->
+      <h1 class="title">
+        <span class="title-highlight">STREET</span> Retail Integration
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="subtitle">
+        Connect your product catalog to Street marketplace. Automatic sync, real-time updates, instant customer reach.
+      </p>
+
+      <!-- Features Grid -->
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.29 7 12 12 20.71 7"></polyline>
+            <line x1="12" y1="22" x2="12" y2="12"></line>
+          </svg>
+          <div class="feature-title">One-Click Install</div>
+          <div class="feature-desc">Simple setup, no technical knowledge required</div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+          <div class="feature-title">Auto Sync</div>
+          <div class="feature-desc">Products, variants & images sync instantly</div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"></path>
+            <path d="m19 9-5 5-4-4-3 3"></path>
+          </svg>
+          <div class="feature-title">Real-Time Updates</div>
+          <div class="feature-desc">Inventory changes reflect immediately</div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <div class="feature-title">Reach Customers</div>
+          <div class="feature-desc">Thousands of shoppers discover your products</div>
+        </div>
+      </div>
+
+      <!-- Tagline -->
+      <div class="tagline">
+        <div class="tagline-item">Seamless</div>
+        <div class="tagline-separator">•</div>
+        <div class="tagline-item">Automatic</div>
+        <div class="tagline-separator">•</div>
+        <div class="tagline-item">Secure</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
