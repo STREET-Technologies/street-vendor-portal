@@ -178,7 +178,7 @@ function OperatingHoursForm() {
             <Link href="/">
               <Image
                 src="/img/logo-white-transparent.png"
-                alt="Street London"
+                alt="STREET"
                 width={150}
                 height={50}
                 priority
@@ -193,7 +193,7 @@ function OperatingHoursForm() {
               {loginError}
             </div>
             <p className="text-gray-400 mb-6">
-              Please download the Street London Retail App to complete your setup.
+              Please open the STREET Partner app to complete your setup.
             </p>
             <Link
               href="/"
@@ -239,7 +239,7 @@ function OperatingHoursForm() {
             Set your store&apos;s operating hours so customers know when you&apos;re available.
           </p>
           <p className="text-sm text-gray-500 mb-8">
-            Don&apos;t worry - you can always update these later in the Street London Retail App.
+            Don&apos;t worry - you can always update these later in the STREET Partner app.
           </p>
 
           {submitError && (
@@ -393,7 +393,7 @@ function OperatingHoursForm() {
 
       <footer className="border-t border-gray-800 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 Street London. All rights reserved.</p>
+          <p>© 2025 STREET. All rights reserved.</p>
         </div>
       </footer>
     </div>

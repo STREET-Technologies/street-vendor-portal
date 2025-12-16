@@ -10,7 +10,7 @@ export default function OnboardingSuccessPage() {
           <Link href="/">
             <Image
               src="/img/logo-white-transparent.png"
-              alt="Street London"
+              alt="STREET"
               width={150}
               height={50}
               priority
@@ -34,7 +34,7 @@ export default function OnboardingSuccessPage() {
             Your vendor account has been successfully created!
           </p>
           <p className="text-lg text-gray-400 mb-8">
-            Check your email for the next steps to connect your store and start selling on Street.
+            Check your email for the next steps to connect your store and start selling on STREET.
           </p>
 
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
@@ -46,15 +46,15 @@ export default function OnboardingSuccessPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">2.</span>
-                <span>Install the Shopify app to sync your product catalog to Street</span>
+                <span>Install the Shopify app to sync your product catalog to STREET</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">3.</span>
-                <span>Download the Street app to manage customer orders on the go</span>
+                <span>Open the STREET Partner app to manage customer orders on the go</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-street-lime text-xl">4.</span>
-                <span>Start receiving orders from customers shopping on Street</span>
+                <span>Start receiving orders from customers shopping on STREET</span>
               </li>
             </ul>
           </div>
@@ -67,12 +67,12 @@ export default function OnboardingSuccessPage() {
               Back to Home
             </Link>
             <a
-              href="https://apps.apple.com/app/street-london"
+              href="https://retailer.street.london/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-street-lime hover:bg-street-lime/80 text-black font-bold py-3 px-6 rounded-lg transition-colors"
             >
-              Download Street App
+              Open STREET Partner
             </a>
           </div>
 
@@ -90,7 +90,7 @@ export default function OnboardingSuccessPage() {
 
       <footer className="border-t border-gray-800 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 Street London. All rights reserved.</p>
+          <p>© 2025 STREET. All rights reserved.</p>
         </div>
       </footer>
     </div>

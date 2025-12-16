@@ -10,7 +10,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-6">
           <Image
             src="/img/logo-white-transparent.png"
-            alt="Street London"
+            alt="STREET"
             width={150}
             height={50}
             priority
@@ -25,7 +25,7 @@ export default function Home() {
             BECOME A PARTNER
           </h1>
           <p className="text-xl md:text-2xl text-street-gray mb-8">
-            Join Street London and bring your products to thousands of shoppers across London.
+            Join STREET and bring your products to thousands of shoppers across London.
           </p>
 
           <Link
@@ -71,7 +71,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-800 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 Street London. All rights reserved.</p>
+          <p>© 2025 STREET. All rights reserved.</p>
         </div>
       </footer>
     </div>

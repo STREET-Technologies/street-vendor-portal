@@ -60,7 +60,7 @@ export default function OnboardPage() {
           <Link href="/">
             <Image
               src="/img/logo-white-transparent.png"
-              alt="Street London"
+              alt="STREET"
               width={150}
               height={50}
               priority
@@ -78,7 +78,7 @@ export default function OnboardPage() {
             VENDOR ONBOARDING
           </h1>
           <p className="text-lg text-street-gray mb-8">
-            Fill out the form below to start your journey as a Street London partner.
+            Fill out the form below to start your journey as a STREET partner.
           </p>
 
           {submitError && (
@@ -165,7 +165,7 @@ export default function OnboardPage() {
                 id="phone"
                 type="tel"
                 className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="+442012345678"
+                placeholder="07123456789 or +447123456789"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
             </div>
@@ -318,7 +318,7 @@ export default function OnboardPage() {
                 >
                   privacy policy
                 </a>{" "}
-                and agree to Street London&apos;s vendor policies *
+                and agree to STREET&apos;s vendor policies *
               </label>
             </div>
             {errors.acceptTerms && (
@@ -346,7 +346,7 @@ export default function OnboardPage() {
 
       <footer className="border-t border-gray-800 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 Street London. All rights reserved.</p>
+          <p>© 2025 STREET. All rights reserved.</p>
         </div>
       </footer>
     </div>

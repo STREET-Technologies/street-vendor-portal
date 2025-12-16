@@ -7,15 +7,27 @@ export const vendorOnboardingSchema = z.object({
   storeUrl: z
     .string()
     .min(1, 'Store URL is required')
-    .regex(
-      /^[\w-]+(\.[\w-]+)+$/,
+    .transform((val) => {
+      // Strip protocol (http://, https://), www., and trailing slashes
+      return val
+        .replace(/^https?:\/\//, '')
+        .replace(/^www\./, '')
+        .replace(/\/+$/, '')
+        .toLowerCase()
+        .trim();
+    })
+    .refine(
+      (val) => /^[\w-]+(\.[\w-]+)+$/.test(val),
       'Must be a valid domain (e.g., yourstore.myshopify.com or yourdomain.com)'
     ),
   email: z.string().email('Invalid email address'),
   phone: z
     .string()
     .min(10, 'Phone number is required')
-    .regex(/^\+\d{1,3}\d{9,14}$/, 'Phone number must be in international format, e.g., +13124567890'),
+    .regex(
+      /^(\+44\d{9,10}|0[1-9]\d{8,9})$/,
+      'Enter a valid UK phone number (e.g., +447123456789 or 07123456789)'
+    ),
   country: z.string().min(2, 'Country is required'),
   postcode: z.string().optional(),
   address: z.string().min(5, 'Address is required'),
