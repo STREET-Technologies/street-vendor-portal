@@ -461,10 +461,10 @@ export default function OnboardPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin mr-2" size={20} />
-                  Submitting...
+                  Processing...
                 </>
               ) : (
-                "Submit Application"
+                "Complete Onboarding"
               )}
             </button>
           </form>
