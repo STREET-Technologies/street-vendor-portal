@@ -11,9 +11,6 @@ import { Loader2 } from "lucide-react";
 
 interface PartialVendorData {
   storeName: string;
-  logo: string | null;
-  storeImage: string | null;
-  description: string | null;
   vendorType: string;
 }
 
@@ -149,22 +146,11 @@ export default function OnboardPage() {
           )}
 
           {partialVendor && (
-            <div className="bg-street-lime/10 border border-street-lime/30 text-street-lime px-4 py-3 rounded-lg mb-6 flex items-center gap-3">
-              {partialVendor.logo && (
-                <Image
-                  src={partialVendor.logo}
-                  alt={partialVendor.storeName}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              )}
-              <div>
-                <p className="font-bold">We found your store!</p>
-                <p className="text-sm text-gray-400">
-                  Please complete the details below to finish your onboarding.
-                </p>
-              </div>
+            <div className="bg-street-lime/10 border border-street-lime/30 text-street-lime px-4 py-3 rounded-lg mb-6">
+              <p className="font-bold">We found your store!</p>
+              <p className="text-sm text-gray-400">
+                Please complete the details below to finish your onboarding.
+              </p>
             </div>
           )}
 
