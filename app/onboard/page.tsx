@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -9,17 +9,78 @@ import { vendorOnboardingSchema, type VendorOnboardingFormData } from "@/lib/val
 import { apiClient } from "@/lib/api/client";
 import { Loader2 } from "lucide-react";
 
+interface PartialVendorData {
+  storeName: string;
+  logo: string | null;
+  storeImage: string | null;
+  description: string | null;
+  vendorType: string;
+}
+
 export default function OnboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isCheckingStore, setIsCheckingStore] = useState(false);
+  const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
+  const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<VendorOnboardingFormData>({
     resolver: zodResolver(vendorOnboardingSchema),
   });
+
+  const checkStoreUrl = useCallback(async (storeUrl: string) => {
+    if (!storeUrl || storeUrl.length < 4) {
+      setPartialVendor(null);
+      return;
+    }
+
+    setIsCheckingStore(true);
+    try {
+      const response = await apiClient.get("/vendors/check-store", {
+        params: { storeUrl },
+      });
+
+      const result = response.data?.data;
+      if (result?.exists && result.vendor) {
+        setPartialVendor(result.vendor);
+        if (result.vendor.storeName) {
+          setValue("storeName", result.vendor.storeName);
+        }
+        if (result.vendor.vendorType) {
+          setValue("vendorType", result.vendor.vendorType);
+        }
+      } else {
+        setPartialVendor(null);
+      }
+    } catch {
+      setPartialVendor(null);
+    } finally {
+      setIsCheckingStore(false);
+    }
+  }, [setValue]);
+
+  const scheduleStoreCheck = useCallback((value: string) => {
+    if (checkTimeoutRef.current) {
+      clearTimeout(checkTimeoutRef.current);
+    }
+    checkTimeoutRef.current = setTimeout(() => {
+      checkStoreUrl(value.trim());
+    }, 300);
+  }, [checkStoreUrl]);
+
+  const handleStoreUrlBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    scheduleStoreCheck(e.target.value);
+  }, [scheduleStoreCheck]);
+
+  const handleStoreUrlPaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData("text");
+    scheduleStoreCheck(pasted);
+  }, [scheduleStoreCheck]);
 
   const onSubmit = async (data: VendorOnboardingFormData) => {
     setIsSubmitting(true);
@@ -87,7 +148,53 @@ export default function OnboardPage() {
             </div>
           )}
 
+          {partialVendor && (
+            <div className="bg-street-lime/10 border border-street-lime/30 text-street-lime px-4 py-3 rounded-lg mb-6 flex items-center gap-3">
+              {partialVendor.logo && (
+                <Image
+                  src={partialVendor.logo}
+                  alt={partialVendor.storeName}
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+              )}
+              <div>
+                <p className="font-bold">We found your store!</p>
+                <p className="text-sm text-gray-400">
+                  Please complete the details below to finish your onboarding.
+                </p>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Store URL - first so we can check for partial onboarding */}
+            <div>
+              <label htmlFor="storeUrl" className="block text-sm font-bold mb-2">
+                Store URL *
+              </label>
+              <div className="relative">
+                <input
+                  {...register("storeUrl")}
+                  id="storeUrl"
+                  type="text"
+                  onBlur={handleStoreUrlBlur}
+                  onPaste={handleStoreUrlPaste}
+                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
+                  placeholder="yourstore.myshopify.com or yourdomain.com"
+                />
+                {isCheckingStore && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Loader2 className="animate-spin text-street-lime" size={18} />
+                  </div>
+                )}
+              </div>
+              {errors.storeUrl && (
+                <p className="text-red-500 text-sm mt-1">{errors.storeUrl.message}</p>
+              )}
+            </div>
+
             {/* Store Name */}
             <div>
               <label htmlFor="storeName" className="block text-sm font-bold mb-2">
@@ -222,23 +329,6 @@ export default function OnboardPage() {
               </div>
             </div>
 
-            {/* Store URL */}
-            <div>
-              <label htmlFor="storeUrl" className="block text-sm font-bold mb-2">
-                Store URL *
-              </label>
-              <input
-                {...register("storeUrl")}
-                id="storeUrl"
-                type="text"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="yourstore.myshopify.com or yourdomain.com"
-              />
-              {errors.storeUrl && (
-                <p className="text-red-500 text-sm mt-1">{errors.storeUrl.message}</p>
-              )}
-            </div>
-
             {/* Vendor Category */}
             <div>
               <label htmlFor="vendorCategory" className="block text-sm font-bold mb-2">
@@ -334,10 +424,10 @@ export default function OnboardPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin mr-2" size={20} />
-                  Submitting...
+                  Processing...
                 </>
               ) : (
-                "Submit Application"
+                "Complete Onboarding"
               )}
             </button>
           </form>
@@ -346,7 +436,7 @@ export default function OnboardPage() {
 
       <footer className="border-t border-gray-800 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 STREET. All rights reserved.</p>
+          <p>&copy; 2025 STREET. All rights reserved.</p>
         </div>
       </footer>
     </div>
