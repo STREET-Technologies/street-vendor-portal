@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,12 +26,12 @@ const DAY_LABELS: Record<typeof DAYS[number], string> = {
 };
 
 function OperatingHoursForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   const {
@@ -65,22 +65,17 @@ function OperatingHoursForm() {
           password,
         });
 
-        console.log('Login response:', response.data);
         const token = response.data.data?.accessToken || response.data.access_token || response.data.accessToken;
 
         if (!token) {
-          console.error('No token in response:', response.data);
           setLoginError("Authentication failed. No token received.");
           setIsLoggingIn(false);
           return;
         }
-
-        console.log('Token received:', token.substring(0, 20) + '...');
         setAuthToken(token);
         setIsLoggingIn(false);
       } catch (error: unknown) {
         const err = error as { response?: { data?: { message?: string } } };
-        console.error('Login error:', err);
         setLoginError(
           err.response?.data?.message || "Failed to authenticate. Please try logging in manually."
         );
@@ -112,11 +107,7 @@ function OperatingHoursForm() {
   };
 
   const onSubmit = async (data: OperatingHoursFormData) => {
-    console.log('Submit clicked - authToken present:', !!authToken);
-    console.log('Form data:', data);
-
     if (!authToken) {
-      console.error('No auth token available');
       setSubmitError("Authentication required. Please refresh the page.");
       return;
     }
@@ -125,24 +116,15 @@ function OperatingHoursForm() {
     setSubmitError(null);
 
     try {
-      console.log('Sending request to /retailer/vendors/store/opening-hours');
-      const response = await apiClient.patch("/retailer/vendors/store/opening-hours", data, {
+      await apiClient.patch("/retailer/vendors/store/opening-hours", data, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
 
-      console.log('Operating hours saved successfully:', response.data);
-
-      // Redirect to Stripe Connect setup
-      const params = new URLSearchParams({
-        email: searchParams.get("email") || "",
-        password: searchParams.get("password") || "",
-      });
-      router.push(`/onboard/stripe-connect?${params.toString()}`);
+      setSubmitSuccess(true);
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
-      console.error('Submit error:', err);
       setSubmitError(
         err.response?.data?.message || "Failed to save operating hours. Please try again."
       );
@@ -152,12 +134,58 @@ function OperatingHoursForm() {
   };
 
   const handleSkip = () => {
-    const params = new URLSearchParams({
-      email: searchParams.get("email") || "",
-      password: searchParams.get("password") || "",
-    });
-    router.push(`/onboard/stripe-connect?${params.toString()}`);
+    setSubmitSuccess(true);
   };
+
+  if (submitSuccess) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <header className="border-b border-gray-800">
+          <div className="container mx-auto px-4 py-6">
+            <Link href="/">
+              <Image
+                src="/img/logo-white-transparent.png"
+                alt="STREET"
+                width={150}
+                height={50}
+                priority
+              />
+            </Link>
+          </div>
+        </header>
+
+        <main className="container mx-auto px-4 py-16">
+          <div className="max-w-lg mx-auto text-center">
+            <CheckCircle2 className="w-16 h-16 text-street-lime mx-auto mb-6" />
+            <h1
+              className="text-4xl md:text-5xl font-bold mb-4"
+              style={{ fontFamily: "Hanson Bold, sans-serif" }}
+            >
+              YOU&apos;RE ALL SET!
+            </h1>
+            <p className="text-lg text-street-gray mb-8">
+              Your store onboarding is complete. You can now log in to the STREET Partner app to manage your store, products, and orders.
+            </p>
+            <p className="text-sm text-gray-500 mb-8">
+              You can update your operating hours anytime from the STREET Partner app.
+            </p>
+            <a
+              href="mailto:support@street.london"
+              className="text-street-lime hover:underline text-sm"
+            >
+              Need help? Contact Support
+            </a>
+          </div>
+        </main>
+
+        <footer className="border-t border-gray-800 mt-20">
+          <div className="container mx-auto px-4 py-8 text-center text-gray-400">
+            <p>&copy; 2025 STREET. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
 
   if (isLoggingIn) {
     return (
