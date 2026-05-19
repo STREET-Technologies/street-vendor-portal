@@ -1,98 +1,47 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import Nav from "../../_components/Nav";
+import Footer from "../../_components/Footer";
 
 export default function OnboardingSuccessPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="border-b border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <Link href="/">
-            <Image
-              src="/img/logo-white-transparent.png"
-              alt="STREET"
-              width={150}
-              height={50}
-              priority
-            />
-          </Link>
-        </div>
-      </header>
+    <>
+      <Nav />
+      <section className="center-section">
+        <div className="container center-block">
+          <div className="check"><CheckCircle2 size={32} strokeWidth={2.25} /></div>
+          <h1>Welcome to STREET.</h1>
+          <p className="lede">Your retailer account is set up. Here&apos;s what to do next.</p>
 
-      <main className="container mx-auto px-4 py-16 md:py-24">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="flex justify-center mb-6">
-            <CheckCircle2 className="w-20 h-20 text-street-lime" />
-          </div>
-          <h1
-            className="text-5xl md:text-6xl font-bold mb-6"
-            style={{ fontFamily: "Hanson Bold, sans-serif" }}
-          >
-            WELCOME TO STREET!
-          </h1>
-          <p className="text-xl text-street-gray mb-4">
-            Your vendor account has been successfully created!
-          </p>
-          <p className="text-lg text-gray-400 mb-8">
-            Check your email for the next steps to connect your store and start selling on STREET.
-          </p>
-
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-            <h2 className="text-2xl font-bold mb-4">What&apos;s Next?</h2>
-            <ul className="text-left space-y-3 text-gray-300">
-              <li className="flex items-start gap-3">
-                <span className="text-street-lime text-xl">1.</span>
-                <span>Check your email for the Shopify app installation link</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-street-lime text-xl">2.</span>
-                <span>Install the Shopify app to sync your product catalog to STREET</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-street-lime text-xl">3.</span>
-                <span>Open the STREET Partner app to manage customer orders on the go</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-street-lime text-xl">4.</span>
-                <span>Start receiving orders from customers shopping on STREET</span>
-              </li>
-            </ul>
+          <div className="next-card">
+            <h2>What&apos;s next</h2>
+            <ol>
+              <li>Check your inbox for the Shopify app install link.</li>
+              <li>Install the STREET app to sync your product catalogue.</li>
+              <li>Open the STREET Partner app to manage incoming orders.</li>
+              <li>Start receiving same-day orders from London shoppers.</li>
+            </ol>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/"
-              className="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-            >
-              Back to Home
-            </Link>
+          <div className="cta-row">
+            <Link href="/" className="btn btn-secondary">Back to home</Link>
             <a
               href="https://retailer.street.london/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-street-lime hover:bg-street-lime/80 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+              className="btn"
             >
-              Open STREET Partner
+              Open STREET Partner →
             </a>
           </div>
 
-          <p className="text-sm text-gray-500 mt-8">
+          <p className="help-line">
             Need help getting started?{" "}
-            <a
-              href="mailto:support@street.london"
-              className="text-street-lime hover:underline"
-            >
-              Contact Support
-            </a>
+            <a href="mailto:support@street.london">support@street.london</a>
           </p>
         </div>
-      </main>
-
-      <footer className="border-t border-gray-800 mt-20">
-        <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>© 2025 STREET. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      </section>
+      <Footer />
+    </>
   );
 }
