@@ -312,7 +312,7 @@ export default function OnboardPage() {
                       Submitting…
                     </>
                   ) : (
-                    "Continue → operating hours"
+                    "Continue → set password"
                   )}
                 </button>
               </div>
