@@ -151,7 +151,8 @@ export default function OnboardPage() {
       });
       const { email, tempPassword } = response.data.data;
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
-      window.location.href = `/change-password?email=${encodeURIComponent(email)}&temp=${encodeURIComponent(tempPassword)}`;
+      const nextParams = new URLSearchParams({ email, temp: tempPassword, storeUrl: data.storeUrl });
+      window.location.href = `/change-password?${nextParams.toString()}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(err.response?.data?.message || "Failed to submit onboarding request. Please try again.");

@@ -16,6 +16,15 @@ import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
 import OnboardingSidebar from "../../_components/OnboardingSidebar";
 
+// Build a deep link to the retailer's own Shopify admin from their store URL.
+// `gymshark-10024.myshopify.com` → `https://admin.shopify.com/store/gymshark-10024`.
+// Falls back to the bare admin URL if the handle can't be extracted.
+function buildShopifyAdminUrl(storeUrl: string | null): string {
+  if (!storeUrl) return "https://admin.shopify.com/";
+  const match = storeUrl.match(/^([\w-]+)\.myshopify\.com/i);
+  return match ? `https://admin.shopify.com/store/${match[1]}` : "https://admin.shopify.com/";
+}
+
 const DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
 const DAY_LABELS: Record<typeof DAYS[number], string> = {
   monday: "Monday",
@@ -165,6 +174,7 @@ function OperatingHoursForm() {
 
   /* ── Success state ────────────────────────────────────── */
   if (submitSuccess) {
+    const shopifyAdminUrl = buildShopifyAdminUrl(searchParams.get("storeUrl"));
     return (
       <>
         <Nav />
@@ -185,7 +195,7 @@ function OperatingHoursForm() {
 
             <div className="cta-row">
               <a
-                href="https://admin.shopify.com/"
+                href={shopifyAdminUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary"

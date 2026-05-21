@@ -45,6 +45,8 @@ function ChangePasswordForm() {
         newPassword: data.newPassword,
       });
       const params = new URLSearchParams({ email: data.email, password: data.newPassword });
+      const storeUrl = searchParams.get("storeUrl");
+      if (storeUrl) params.set("storeUrl", storeUrl);
       window.location.href = `/onboard/operating-hours?${params.toString()}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
