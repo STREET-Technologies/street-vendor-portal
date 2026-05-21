@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +15,10 @@ interface PartialVendorData {
   storeName: string;
   vendorType: string;
 }
+
+// Bumped if the saved shape changes; old payloads are ignored automatically.
+const STORAGE_KEY = "street:onboard:v1";
+const STORAGE_DEBOUNCE_MS = 400;
 
 // Strip Shopify's auto-appended "-NNNN" suffix from store handles
 // (e.g. "gymshark-10024" → "Gymshark", "astrid-and-miyu-6791" → "Astrid And Miyu").
@@ -36,11 +40,15 @@ export default function OnboardPage() {
   const [isCheckingStore, setIsCheckingStore] = useState(false);
   const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasHydratedRef = useRef(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
+    watch,
     formState: { errors },
   } = useForm<VendorOnboardingFormData>({
     resolver: zodResolver(vendorOnboardingSchema),
@@ -49,6 +57,43 @@ export default function OnboardPage() {
       vendorType: "shopify",
     },
   });
+
+  // Rehydrate from localStorage on first mount. acceptTerms is deliberately
+  // dropped so the retailer re-affirms the T&Cs each session.
+  useEffect(() => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+      if (raw) {
+        const saved = JSON.parse(raw) as Partial<VendorOnboardingFormData>;
+        const { acceptTerms: _omit, ...rest } = saved;
+        reset({ country: "United Kingdom", vendorType: "shopify", ...rest });
+      }
+    } catch {
+      // Corrupt storage — fall through to defaults.
+    } finally {
+      hasHydratedRef.current = true;
+    }
+  }, [reset]);
+
+  // Debounced auto-save on any form change.
+  useEffect(() => {
+    const subscription = watch((data) => {
+      if (!hasHydratedRef.current) return;
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => {
+        try {
+          const { acceptTerms: _omit, ...rest } = data;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
+        } catch {
+          // Quota or privacy mode — silently no-op.
+        }
+      }, STORAGE_DEBOUNCE_MS);
+    });
+    return () => {
+      subscription.unsubscribe();
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, [watch]);
 
   const checkStoreUrl = useCallback(async (storeUrl: string) => {
     if (!storeUrl || storeUrl.length < 4) {
@@ -105,6 +150,7 @@ export default function OnboardPage() {
         vendorCategory: data.vendorCategory,
       });
       const { email, tempPassword } = response.data.data;
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
       window.location.href = `/change-password?email=${encodeURIComponent(email)}&temp=${encodeURIComponent(tempPassword)}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
