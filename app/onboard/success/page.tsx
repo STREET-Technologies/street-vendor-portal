@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
@@ -16,15 +15,21 @@ export default function OnboardingSuccessPage() {
           <div className="next-card">
             <h2>What&apos;s next</h2>
             <ol>
-              <li>Check your inbox for the Shopify app install link.</li>
-              <li>Install the STREET app to sync your product catalogue.</li>
-              <li>Open the STREET Partner app to manage incoming orders.</li>
-              <li>Start receiving same-day orders from London shoppers.</li>
+              <li>Log into the Partner app: use the email and password you just set in onboarding.</li>
+              <li>Set your STREET catalog from your Shopify admin. The STREET app there is the fastest way to bulk-toggle visibility on your products.</li>
+              <li>Wait for your first STREET order. Accept it in the Partner app, pack the items, mark it ready for collection, and our rider takes it from there.</li>
             </ol>
           </div>
 
           <div className="cta-row">
-            <Link href="/" className="btn btn-secondary">Back to home</Link>
+            <a
+              href="https://admin.shopify.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary"
+            >
+              Open Shopify admin
+            </a>
             <a
               href="https://retailer.street.london/"
               target="_blank"

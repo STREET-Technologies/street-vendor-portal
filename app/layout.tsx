@@ -10,7 +10,7 @@ const barlow = Barlow({
 });
 
 export const metadata: Metadata = {
-  title: "STREET — Retailer onboarding",
+  title: "STREET · Retailer onboarding",
   description: "Finish setting up your store on STREET, London's same-day delivery marketplace.",
   icons: {
     icon: "/favicon.ico",

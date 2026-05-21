@@ -111,7 +111,7 @@ export default function OnboardPage() {
             <h1>You&apos;re in. Let&apos;s finish setting up your store.</h1>
             <p className="lede">
               The STREET app is installed on your Shopify store. We just need a few details to publish you to
-              the marketplace and route same-day deliveries through your existing flow.
+              the marketplace and start routing instant delivery orders to the Partner app.
             </p>
           </div>
           <aside className="hero-visual" aria-hidden="true">
@@ -190,7 +190,7 @@ export default function OnboardPage() {
                 {errors.storeUrl ? (
                   <span className="err">{errors.storeUrl.message}</span>
                 ) : (
-                  <span className="hint">Strip <b>http://</b> and <b>www.</b> — we&apos;ll auto-detect your platform from the URL.</span>
+                  <span className="hint">Strip <b>http://</b> and <b>www.</b>; we&apos;ll auto-detect your platform from the URL.</span>
                 )}
               </div>
 

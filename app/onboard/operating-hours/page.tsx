@@ -171,17 +171,37 @@ function OperatingHoursForm() {
         <section className="center-section">
           <div className="container center-block">
             <div className="check"><CheckCircle2 size={32} strokeWidth={2.25} /></div>
-            <h1>You&apos;re all set.</h1>
-            <p className="lede">
-              Your store is set up on STREET. You can now log in to the STREET Partner app to manage your store,
-              products, and orders.
-            </p>
-            <p className="sub">
-              You can update your operating hours any time from the STREET Partner app.
-            </p>
-            <div className="cta-row">
-              <Link href="/" className="btn">Back to home</Link>
+            <h1>Welcome to STREET.</h1>
+            <p className="lede">Your retailer account is set up. Here&apos;s what to do next.</p>
+
+            <div className="next-card">
+              <h2>What&apos;s next</h2>
+              <ol>
+                <li>Log into the Partner app: use the email and password you just set in onboarding.</li>
+                <li>Set your STREET catalog from your Shopify admin. The STREET app there is the fastest way to bulk-toggle visibility on your products.</li>
+                <li>Wait for your first STREET order. Accept it in the Partner app, pack the items, mark it ready for collection, and our rider takes it from there.</li>
+              </ol>
             </div>
+
+            <div className="cta-row">
+              <a
+                href="https://admin.shopify.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+              >
+                Open Shopify admin
+              </a>
+              <a
+                href="https://retailer.street.london/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Open STREET Partner &rarr;
+              </a>
+            </div>
+
             <p className="help-line">
               Need help? <a href="mailto:support@street.london">support@street.london</a>
             </p>
@@ -255,7 +275,7 @@ function OperatingHoursForm() {
                           <label>Opens</label>
                           <input {...register(`${day}.openTime`)} type="time" />
                         </div>
-                        <span className="sep">—</span>
+                        <span className="sep">–</span>
                         <div className="time-fld">
                           <label>Closes</label>
                           <input {...register(`${day}.closeTime`)} type="time" />
