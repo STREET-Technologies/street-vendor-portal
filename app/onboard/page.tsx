@@ -14,7 +14,31 @@ import OnboardingSidebar from "../_components/OnboardingSidebar";
 interface PartialVendorData {
   storeName: string;
   vendorType: string;
+  // All pre-fill fields are optional — Shopify may not have supplied them at
+  // install time (e.g. older installs, or stores where the merchant left
+  // billingAddress blank). The form treats missing values as "ask the vendor".
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  postcode?: string | null;
 }
+
+// Set of field names we pre-fill from Shopify. Used to render the
+// "from Shopify" hint and suppress it for fields the vendor edited.
+const SHOPIFY_PREFILLABLE = [
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "address",
+  "country",
+  "postcode",
+] as const;
+type ShopifyPrefillField = (typeof SHOPIFY_PREFILLABLE)[number];
 
 // Bumped if the saved shape changes; old payloads are ignored automatically.
 const STORAGE_KEY = "street:onboard:v1";
@@ -39,6 +63,11 @@ export default function OnboardPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isCheckingStore, setIsCheckingStore] = useState(false);
   const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
+  // Tracks which fields were filled from Shopify so we can render the
+  // "from Shopify" hint. Cleared per-field if the vendor edits the value.
+  const [prefilledFields, setPrefilledFields] = useState<Set<ShopifyPrefillField>>(
+    new Set(),
+  );
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasHydratedRef = useRef(false);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -98,6 +127,7 @@ export default function OnboardPage() {
   const checkStoreUrl = useCallback(async (storeUrl: string) => {
     if (!storeUrl || storeUrl.length < 4) {
       setPartialVendor(null);
+      setPrefilledFields(new Set());
       return;
     }
     setIsCheckingStore(true);
@@ -105,18 +135,64 @@ export default function OnboardPage() {
       const response = await apiClient.get("/vendors/check-store", { params: { storeUrl } });
       const result = response.data?.data;
       if (result?.exists && result.vendor) {
-        setPartialVendor(result.vendor);
-        if (result.vendor.storeName) setValue("storeName", cleanShopifyStoreName(result.vendor.storeName));
-        if (result.vendor.vendorType) setValue("vendorType", result.vendor.vendorType);
+        const v = result.vendor as PartialVendorData;
+        setPartialVendor(v);
+
+        // Pre-fill every field Shopify supplied at install time. Vendor can
+        // edit anything; the "from Shopify" hint clears on edit (handled via
+        // a watch effect below). See TT-209.
+        const filled = new Set<ShopifyPrefillField>();
+        if (v.storeName) setValue("storeName", cleanShopifyStoreName(v.storeName));
+        if (v.vendorType) setValue("vendorType", v.vendorType as "shopify" | "woocommerce" | "magento" | "custom" | "other");
+        if (v.firstName) { setValue("firstName", v.firstName); filled.add("firstName"); }
+        if (v.lastName) { setValue("lastName", v.lastName); filled.add("lastName"); }
+        if (v.email) { setValue("email", v.email); filled.add("email"); }
+        if (v.phone) { setValue("phone", v.phone); filled.add("phone"); }
+        if (v.address) { setValue("address", v.address); filled.add("address"); }
+        if (v.country) { setValue("country", v.country); filled.add("country"); }
+        if (v.postcode) { setValue("postcode", v.postcode); filled.add("postcode"); }
+        setPrefilledFields(filled);
       } else {
         setPartialVendor(null);
+        setPrefilledFields(new Set());
       }
     } catch {
       setPartialVendor(null);
+      setPrefilledFields(new Set());
     } finally {
       setIsCheckingStore(false);
     }
   }, [setValue]);
+
+  // Clear the "from Shopify" hint on a field once the vendor edits it.
+  // Watching individual fields keeps the hint accurate without churn.
+  const watchedValues = watch(SHOPIFY_PREFILLABLE);
+  useEffect(() => {
+    if (!partialVendor || prefilledFields.size === 0) return;
+    const next = new Set(prefilledFields);
+    SHOPIFY_PREFILLABLE.forEach((field, idx) => {
+      const currentValue = watchedValues[idx];
+      const originalValue = partialVendor[field];
+      if (
+        prefilledFields.has(field) &&
+        currentValue !== originalValue &&
+        currentValue !== cleanShopifyStoreName(originalValue ?? "")
+      ) {
+        next.delete(field);
+      }
+    });
+    if (next.size !== prefilledFields.size) {
+      setPrefilledFields(next);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedValues, partialVendor]);
+
+  // Helper for the JSX — renders the "from Shopify" hint after the field
+  // label when the value is still the pre-fill.
+  const shopifyHint = (field: ShopifyPrefillField) =>
+    prefilledFields.has(field) ? (
+      <span className="opt">from Shopify</span>
+    ) : null;
 
   const scheduleStoreCheck = useCallback((value: string) => {
     if (checkTimeoutRef.current) clearTimeout(checkTimeoutRef.current);
@@ -268,19 +344,19 @@ export default function OnboardPage() {
               </div>
 
               <div className="fld">
-                <label htmlFor="firstName">First name</label>
+                <label htmlFor="firstName">First name {shopifyHint("firstName")}</label>
                 <input {...register("firstName")} id="firstName" type="text" aria-invalid={!!errors.firstName} />
                 {errors.firstName && <span className="err">{errors.firstName.message}</span>}
               </div>
 
               <div className="fld">
-                <label htmlFor="lastName">Last name</label>
+                <label htmlFor="lastName">Last name {shopifyHint("lastName")}</label>
                 <input {...register("lastName")} id="lastName" type="text" aria-invalid={!!errors.lastName} />
                 {errors.lastName && <span className="err">{errors.lastName.message}</span>}
               </div>
 
               <div className="fld">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email {shopifyHint("email")}</label>
                 <input
                   {...register("email")}
                   id="email"
@@ -292,7 +368,7 @@ export default function OnboardPage() {
               </div>
 
               <div className="fld">
-                <label htmlFor="phone">Phone <span className="opt">UK mobile</span></label>
+                <label htmlFor="phone">Phone <span className="opt">UK mobile</span> {shopifyHint("phone")}</label>
                 <input
                   {...register("phone")}
                   id="phone"
@@ -304,19 +380,19 @@ export default function OnboardPage() {
               </div>
 
               <div className="fld full">
-                <label htmlFor="address">Business address <span className="opt">where we collect orders from</span></label>
+                <label htmlFor="address">Business address <span className="opt">where we collect orders from</span> {shopifyHint("address")}</label>
                 <input {...register("address")} id="address" type="text" placeholder="123 Main Street" aria-invalid={!!errors.address} />
                 {errors.address && <span className="err">{errors.address.message}</span>}
               </div>
 
               <div className="fld">
-                <label htmlFor="country">Country</label>
+                <label htmlFor="country">Country {shopifyHint("country")}</label>
                 <input {...register("country")} id="country" type="text" aria-invalid={!!errors.country} />
                 {errors.country && <span className="err">{errors.country.message}</span>}
               </div>
 
               <div className="fld">
-                <label htmlFor="postcode">Postcode</label>
+                <label htmlFor="postcode">Postcode {shopifyHint("postcode")}</label>
                 <input {...register("postcode")} id="postcode" type="text" placeholder="SW1A 1AA" />
               </div>
 
