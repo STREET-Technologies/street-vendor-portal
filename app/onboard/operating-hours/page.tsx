@@ -16,15 +16,6 @@ import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
 import OnboardingSidebar from "../../_components/OnboardingSidebar";
 
-// Build a deep link to the retailer's own Shopify admin from their store URL.
-// `gymshark-10024.myshopify.com` → `https://admin.shopify.com/store/gymshark-10024`.
-// Falls back to the bare admin URL if the handle can't be extracted.
-function buildShopifyAdminUrl(storeUrl: string | null): string {
-  if (!storeUrl) return "https://admin.shopify.com/";
-  const match = storeUrl.match(/^([\w-]+)\.myshopify\.com/i);
-  return match ? `https://admin.shopify.com/store/${match[1]}` : "https://admin.shopify.com/";
-}
-
 const DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] as const;
 const DAY_LABELS: Record<typeof DAYS[number], string> = {
   monday: "Monday",
@@ -42,7 +33,6 @@ function OperatingHoursForm() {
   const [isLoggingIn, setIsLoggingIn] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   const {
@@ -120,7 +110,7 @@ function OperatingHoursForm() {
       await apiClient.patch("/retailer/vendors/store/opening-hours", data, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      setSubmitSuccess(true);
+      redirectToComplete();
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(err.response?.data?.message || "Failed to save operating hours. Please try again.");
@@ -129,7 +119,15 @@ function OperatingHoursForm() {
     }
   };
 
-  const handleSkip = () => setSubmitSuccess(true);
+  const redirectToComplete = () => {
+    const storeUrl = searchParams.get("storeUrl");
+    const next = storeUrl
+      ? `/onboard/complete?storeUrl=${encodeURIComponent(storeUrl)}`
+      : "/onboard/complete";
+    window.location.href = next;
+  };
+
+  const handleSkip = () => redirectToComplete();
 
   /* ── Logging in state ─────────────────────────────────── */
   if (isLoggingIn) {
@@ -165,56 +163,6 @@ function OperatingHoursForm() {
             <div className="cta-row">
               <Link href="/" className="btn">Go to home</Link>
             </div>
-          </div>
-        </section>
-        <Footer />
-      </>
-    );
-  }
-
-  /* ── Success state ────────────────────────────────────── */
-  if (submitSuccess) {
-    const shopifyAdminUrl = buildShopifyAdminUrl(searchParams.get("storeUrl"));
-    return (
-      <>
-        <Nav />
-        <section className="center-section">
-          <div className="container center-block">
-            <div className="check"><CheckCircle2 size={32} strokeWidth={2.25} /></div>
-            <h1>Welcome to STREET.</h1>
-            <p className="lede">Your retailer account is set up. Here&apos;s what to do next.</p>
-
-            <div className="next-card">
-              <h2>What&apos;s next</h2>
-              <ol>
-                <li>Log into the Partner app: use the email and password you just set in onboarding.</li>
-                <li>Set your STREET catalog from your Shopify admin. The STREET app there is the fastest way to bulk-toggle visibility on your products.</li>
-                <li>Wait for your first STREET order. Accept it in the Partner app, pack the items, mark it ready for collection, and our rider takes it from there.</li>
-              </ol>
-            </div>
-
-            <div className="cta-row">
-              <a
-                href={shopifyAdminUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary"
-              >
-                Open Shopify admin
-              </a>
-              <a
-                href="https://retailer.street.london/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn"
-              >
-                Open STREET Partner &rarr;
-              </a>
-            </div>
-
-            <p className="help-line">
-              Need help? <a href="mailto:support@street.london">support@street.london</a>
-            </p>
           </div>
         </section>
         <Footer />
