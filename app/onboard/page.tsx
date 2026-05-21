@@ -16,6 +16,20 @@ interface PartialVendorData {
   vendorType: string;
 }
 
+// Strip Shopify's auto-appended "-NNNN" suffix from store handles
+// (e.g. "gymshark-10024" → "Gymshark", "astrid-and-miyu-6791" → "Astrid And Miyu").
+// Only strips trailing purely-numeric segments so legitimate hyphenated
+// names like "blue-bottle-coffee" stay intact.
+function cleanShopifyStoreName(raw: string): string {
+  if (!raw) return raw;
+  return raw
+    .replace(/[-\s]+\d+\s*$/, "")
+    .trim()
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export default function OnboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -47,7 +61,7 @@ export default function OnboardPage() {
       const result = response.data?.data;
       if (result?.exists && result.vendor) {
         setPartialVendor(result.vendor);
-        if (result.vendor.storeName) setValue("storeName", result.vendor.storeName);
+        if (result.vendor.storeName) setValue("storeName", cleanShopifyStoreName(result.vendor.storeName));
         if (result.vendor.vendorType) setValue("vendorType", result.vendor.vendorType);
       } else {
         setPartialVendor(null);
