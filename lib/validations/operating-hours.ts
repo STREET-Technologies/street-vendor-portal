@@ -39,13 +39,14 @@ export const operatingHoursSchema = z.object({
 
 export type OperatingHoursFormData = z.infer<typeof operatingHoursSchema>;
 
-// Default values for the form
+// UK retail baseline. Most stores will only edit one or two days — small
+// changes beat full input. See TT-209 for rationale.
 export const defaultOperatingHours: OperatingHoursFormData = {
-  monday: { openTime: '09:00', closeTime: '17:00', isClosed: false },
-  tuesday: { openTime: '09:00', closeTime: '17:00', isClosed: false },
-  wednesday: { openTime: '09:00', closeTime: '17:00', isClosed: false },
-  thursday: { openTime: '09:00', closeTime: '17:00', isClosed: false },
-  friday: { openTime: '09:00', closeTime: '17:00', isClosed: false },
-  saturday: { openTime: '10:00', closeTime: '16:00', isClosed: false },
-  sunday: { openTime: '00:00', closeTime: '00:00', isClosed: true },
+  monday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  tuesday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  wednesday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  thursday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  friday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  saturday: { openTime: '10:00', closeTime: '19:00', isClosed: false },
+  sunday: { openTime: '11:00', closeTime: '17:00', isClosed: false },
 };

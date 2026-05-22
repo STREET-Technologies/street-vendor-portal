@@ -1,17 +1,61 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { vendorOnboardingSchema, type VendorOnboardingFormData } from "@/lib/validations/vendor";
 import { apiClient } from "@/lib/api/client";
 import { Loader2 } from "lucide-react";
+import Nav from "../_components/Nav";
+import Footer from "../_components/Footer";
+import OnboardingSidebar from "../_components/OnboardingSidebar";
 
 interface PartialVendorData {
   storeName: string;
   vendorType: string;
+  // All pre-fill fields are optional — Shopify may not have supplied them at
+  // install time (e.g. older installs, or stores where the merchant left
+  // billingAddress blank). The form treats missing values as "ask the vendor".
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  postcode?: string | null;
+}
+
+// Set of field names we pre-fill from Shopify. Used to render the
+// "from Shopify" hint and suppress it for fields the vendor edited.
+const SHOPIFY_PREFILLABLE = [
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "address",
+  "country",
+  "postcode",
+] as const;
+type ShopifyPrefillField = (typeof SHOPIFY_PREFILLABLE)[number];
+
+// Bumped if the saved shape changes; old payloads are ignored automatically.
+const STORAGE_KEY = "street:onboard:v1";
+const STORAGE_DEBOUNCE_MS = 400;
+
+// Strip Shopify's auto-appended "-NNNN" suffix from store handles
+// (e.g. "gymshark-10024" → "Gymshark", "astrid-and-miyu-6791" → "Astrid And Miyu").
+// Only strips trailing purely-numeric segments so legitimate hyphenated
+// names like "blue-bottle-coffee" stay intact.
+function cleanShopifyStoreName(raw: string): string {
+  if (!raw) return raw;
+  return raw
+    .replace(/[-\s]+\d+\s*$/, "")
+    .trim()
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export default function OnboardPage() {
@@ -19,55 +63,140 @@ export default function OnboardPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isCheckingStore, setIsCheckingStore] = useState(false);
   const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
+  // Tracks which fields were filled from Shopify so we can render the
+  // "from Shopify" hint. Cleared per-field if the vendor edits the value.
+  const [prefilledFields, setPrefilledFields] = useState<Set<ShopifyPrefillField>>(
+    new Set(),
+  );
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasHydratedRef = useRef(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
+    watch,
     formState: { errors },
   } = useForm<VendorOnboardingFormData>({
     resolver: zodResolver(vendorOnboardingSchema),
+    defaultValues: {
+      country: "United Kingdom",
+      vendorType: "shopify",
+    },
   });
+
+  // Rehydrate from localStorage on first mount. acceptTerms is deliberately
+  // dropped so the retailer re-affirms the T&Cs each session.
+  useEffect(() => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+      if (raw) {
+        const saved = JSON.parse(raw) as Partial<VendorOnboardingFormData>;
+        const { acceptTerms: _omit, ...rest } = saved;
+        reset({ country: "United Kingdom", vendorType: "shopify", ...rest });
+      }
+    } catch {
+      // Corrupt storage — fall through to defaults.
+    } finally {
+      hasHydratedRef.current = true;
+    }
+  }, [reset]);
+
+  // Debounced auto-save on any form change.
+  useEffect(() => {
+    const subscription = watch((data) => {
+      if (!hasHydratedRef.current) return;
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => {
+        try {
+          const { acceptTerms: _omit, ...rest } = data;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
+        } catch {
+          // Quota or privacy mode — silently no-op.
+        }
+      }, STORAGE_DEBOUNCE_MS);
+    });
+    return () => {
+      subscription.unsubscribe();
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, [watch]);
 
   const checkStoreUrl = useCallback(async (storeUrl: string) => {
     if (!storeUrl || storeUrl.length < 4) {
       setPartialVendor(null);
+      setPrefilledFields(new Set());
       return;
     }
-
     setIsCheckingStore(true);
     try {
-      const response = await apiClient.get("/vendors/check-store", {
-        params: { storeUrl },
-      });
-
+      const response = await apiClient.get("/vendors/check-store", { params: { storeUrl } });
       const result = response.data?.data;
       if (result?.exists && result.vendor) {
-        setPartialVendor(result.vendor);
-        if (result.vendor.storeName) {
-          setValue("storeName", result.vendor.storeName);
-        }
-        if (result.vendor.vendorType) {
-          setValue("vendorType", result.vendor.vendorType);
-        }
+        const v = result.vendor as PartialVendorData;
+        setPartialVendor(v);
+
+        // Pre-fill every field Shopify supplied at install time. Vendor can
+        // edit anything; the "from Shopify" hint clears on edit (handled via
+        // a watch effect below). See TT-209.
+        const filled = new Set<ShopifyPrefillField>();
+        if (v.storeName) setValue("storeName", cleanShopifyStoreName(v.storeName));
+        if (v.vendorType) setValue("vendorType", v.vendorType as "shopify" | "woocommerce" | "magento" | "custom" | "other");
+        if (v.firstName) { setValue("firstName", v.firstName); filled.add("firstName"); }
+        if (v.lastName) { setValue("lastName", v.lastName); filled.add("lastName"); }
+        if (v.email) { setValue("email", v.email); filled.add("email"); }
+        if (v.phone) { setValue("phone", v.phone); filled.add("phone"); }
+        if (v.address) { setValue("address", v.address); filled.add("address"); }
+        if (v.country) { setValue("country", v.country); filled.add("country"); }
+        if (v.postcode) { setValue("postcode", v.postcode); filled.add("postcode"); }
+        setPrefilledFields(filled);
       } else {
         setPartialVendor(null);
+        setPrefilledFields(new Set());
       }
     } catch {
       setPartialVendor(null);
+      setPrefilledFields(new Set());
     } finally {
       setIsCheckingStore(false);
     }
   }, [setValue]);
 
-  const scheduleStoreCheck = useCallback((value: string) => {
-    if (checkTimeoutRef.current) {
-      clearTimeout(checkTimeoutRef.current);
+  // Clear the "from Shopify" hint on a field once the vendor edits it.
+  // Watching individual fields keeps the hint accurate without churn.
+  const watchedValues = watch(SHOPIFY_PREFILLABLE);
+  useEffect(() => {
+    if (!partialVendor || prefilledFields.size === 0) return;
+    const next = new Set(prefilledFields);
+    SHOPIFY_PREFILLABLE.forEach((field, idx) => {
+      const currentValue = watchedValues[idx];
+      const originalValue = partialVendor[field];
+      if (
+        prefilledFields.has(field) &&
+        currentValue !== originalValue &&
+        currentValue !== cleanShopifyStoreName(originalValue ?? "")
+      ) {
+        next.delete(field);
+      }
+    });
+    if (next.size !== prefilledFields.size) {
+      setPrefilledFields(next);
     }
-    checkTimeoutRef.current = setTimeout(() => {
-      checkStoreUrl(value.trim());
-    }, 300);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedValues, partialVendor]);
+
+  // Helper for the JSX — renders the "from Shopify" hint after the field
+  // label when the value is still the pre-fill.
+  const shopifyHint = (field: ShopifyPrefillField) =>
+    prefilledFields.has(field) ? (
+      <span className="opt">from Shopify</span>
+    ) : null;
+
+  const scheduleStoreCheck = useCallback((value: string) => {
+    if (checkTimeoutRef.current) clearTimeout(checkTimeoutRef.current);
+    checkTimeoutRef.current = setTimeout(() => checkStoreUrl(value.trim()), 300);
   }, [checkStoreUrl]);
 
   const handleStoreUrlBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
@@ -82,7 +211,6 @@ export default function OnboardPage() {
   const onSubmit = async (data: VendorOnboardingFormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
-
     try {
       const response = await apiClient.post("/vendors/onboard", {
         storeName: data.storeName,
@@ -97,334 +225,240 @@ export default function OnboardPage() {
         vendorType: data.vendorType,
         vendorCategory: data.vendorCategory,
       });
-
-      // Redirect to change-password with pre-filled email and temp password
       const { email, tempPassword } = response.data.data;
-      window.location.href = `/change-password?email=${encodeURIComponent(email)}&temp=${encodeURIComponent(tempPassword)}`;
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
+      const nextParams = new URLSearchParams({ email, temp: tempPassword, storeUrl: data.storeUrl });
+      window.location.href = `/change-password?${nextParams.toString()}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
-      setSubmitError(
-        err.response?.data?.message || "Failed to submit onboarding request. Please try again."
-      );
+      setSubmitError(err.response?.data?.message || "Failed to submit onboarding request. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="border-b border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <Link href="/">
-            <Image
-              src="/img/logo-white-transparent.png"
-              alt="STREET"
-              width={150}
-              height={50}
-              priority
-            />
-          </Link>
-        </div>
-      </header>
+    <>
+      <Nav />
 
-      <main className="container mx-auto px-4 py-12 md:py-16">
-        <div className="max-w-2xl mx-auto">
-          <h1
-            className="text-4xl md:text-5xl font-bold mb-4"
-            style={{ fontFamily: "Hanson Bold, sans-serif" }}
-          >
-            VENDOR ONBOARDING
-          </h1>
-          <p className="text-lg text-street-gray mb-8">
-            Fill out the form below to start your journey as a STREET partner.
-          </p>
+      <section className="hero">
+        <div className="container hero-grid">
+          <div className="hero-block">
+            <p className="hero-eyebrow">Shopify install complete</p>
+            <h1>You&apos;re in. Let&apos;s finish setting up your store.</h1>
+            <p className="lede">
+              The STREET app is installed on your Shopify store. We just need a few details to publish you to
+              the marketplace and start routing instant delivery orders to the Partner app.
+            </p>
+          </div>
+          <aside className="hero-visual" aria-hidden="true">
+            <Image
+              src="/img/retailer-hero.jpg"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 33vw"
+              style={{ objectFit: "cover" }}
+            />
+          </aside>
+        </div>
+      </section>
+
+      <section className="apply" id="apply">
+        <div className="container">
+          <header className="apply-head">
+            <div>
+              <p className="section-eyebrow">Step 02 of 05</p>
+              <h2 className="section-title">Confirm your store details.</h2>
+              <div className="stepbar" aria-hidden="true">
+                <div className="stp done" />
+                <div className="stp current" />
+                <div className="stp" />
+                <div className="stp" />
+                <div className="stp" />
+              </div>
+            </div>
+            <p className="step-meta">
+              Approx. 4 minutes.<br />
+              Auto-saves on this device.
+            </p>
+          </header>
 
           {submitError && (
-            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg mb-6">
-              {submitError}
+            <div className="alert alert-error" role="alert">
+              <b>Couldn&apos;t submit:</b><span>{submitError}</span>
             </div>
           )}
 
           {partialVendor && (
-            <div className="bg-street-lime/10 border border-street-lime/30 text-street-lime px-4 py-3 rounded-lg mb-6">
-              <p className="font-bold">We found your store!</p>
-              <p className="text-sm text-gray-400">
-                Please complete the details below to finish your onboarding.
-              </p>
+            <div className="alert alert-info" role="status">
+              <b>We found your store.</b>
+              <span>Pre-filled the bits we know. Complete the rest below to finish onboarding.</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Store URL - first so we can check for partial onboarding */}
-            <div>
-              <label htmlFor="storeUrl" className="block text-sm font-bold mb-2">
-                Store URL *
-              </label>
-              <div className="relative">
-                <input
-                  {...register("storeUrl")}
-                  id="storeUrl"
-                  type="text"
-                  onBlur={handleStoreUrlBlur}
-                  onPaste={handleStoreUrlPaste}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                  placeholder="yourstore.myshopify.com or yourdomain.com"
-                />
-                {isCheckingStore && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Loader2 className="animate-spin text-street-lime" size={18} />
-                  </div>
-                )}
-              </div>
-              {errors.storeUrl && (
-                <p className="text-red-500 text-sm mt-1">{errors.storeUrl.message}</p>
-              )}
-            </div>
+          <div className="apply-grid">
+            <OnboardingSidebar current="store" />
 
-            {/* Store Name */}
-            <div>
-              <label htmlFor="storeName" className="block text-sm font-bold mb-2">
-                Store Name *
-              </label>
-              <input
-                {...register("storeName")}
-                id="storeName"
-                type="text"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="Your Store Name"
-              />
-              {errors.storeName && (
-                <p className="text-red-500 text-sm mt-1">{errors.storeName.message}</p>
-              )}
-            </div>
-
-            {/* First Name & Last Name */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-bold mb-2">
-                  First Name *
+            <form onSubmit={handleSubmit(onSubmit)} className="form-grid" noValidate>
+              <div className="fld full">
+                <label htmlFor="storeUrl">
+                  Store URL
+                  <span className="opt">pre-filled from Shopify</span>
                 </label>
-                <input
-                  {...register("firstName")}
-                  id="firstName"
-                  type="text"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                  placeholder="John"
-                />
-                {errors.firstName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                <div style={{ position: "relative" }}>
+                  <input
+                    {...register("storeUrl")}
+                    id="storeUrl"
+                    type="text"
+                    onBlur={handleStoreUrlBlur}
+                    onPaste={handleStoreUrlPaste}
+                    placeholder="yourstore.myshopify.com or yourdomain.com"
+                    aria-invalid={!!errors.storeUrl}
+                  />
+                  {isCheckingStore && (
+                    <Loader2
+                      size={18}
+                      className="animate-spin"
+                      style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--gray-dark)" }}
+                    />
+                  )}
+                </div>
+                {errors.storeUrl ? (
+                  <span className="err">{errors.storeUrl.message}</span>
+                ) : (
+                  <span className="hint">Strip <b>http://</b> and <b>www.</b>; we&apos;ll auto-detect your platform from the URL.</span>
                 )}
               </div>
 
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-bold mb-2">
-                  Last Name *
+              <div className="fld full">
+                <label htmlFor="storeName">Store name <span className="opt">as shown to customers</span></label>
+                <input
+                  {...register("storeName")}
+                  id="storeName"
+                  type="text"
+                  placeholder="The name customers see at checkout"
+                  aria-invalid={!!errors.storeName}
+                />
+                {errors.storeName && <span className="err">{errors.storeName.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="firstName">First name {shopifyHint("firstName")}</label>
+                <input {...register("firstName")} id="firstName" type="text" aria-invalid={!!errors.firstName} />
+                {errors.firstName && <span className="err">{errors.firstName.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="lastName">Last name {shopifyHint("lastName")}</label>
+                <input {...register("lastName")} id="lastName" type="text" aria-invalid={!!errors.lastName} />
+                {errors.lastName && <span className="err">{errors.lastName.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="email">Email {shopifyHint("email")}</label>
+                <input
+                  {...register("email")}
+                  id="email"
+                  type="email"
+                  placeholder="The address we&apos;ll reply to"
+                  aria-invalid={!!errors.email}
+                />
+                {errors.email && <span className="err">{errors.email.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="phone">Phone <span className="opt">UK mobile</span> {shopifyHint("phone")}</label>
+                <input
+                  {...register("phone")}
+                  id="phone"
+                  type="tel"
+                  placeholder="07123 456 789 or +447123456789"
+                  aria-invalid={!!errors.phone}
+                />
+                {errors.phone && <span className="err">{errors.phone.message}</span>}
+              </div>
+
+              <div className="fld full">
+                <label htmlFor="address">Business address <span className="opt">where we collect orders from</span> {shopifyHint("address")}</label>
+                <input {...register("address")} id="address" type="text" placeholder="123 Main Street" aria-invalid={!!errors.address} />
+                {errors.address && <span className="err">{errors.address.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="country">Country {shopifyHint("country")}</label>
+                <input {...register("country")} id="country" type="text" aria-invalid={!!errors.country} />
+                {errors.country && <span className="err">{errors.country.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="postcode">Postcode {shopifyHint("postcode")}</label>
+                <input {...register("postcode")} id="postcode" type="text" placeholder="SW1A 1AA" />
+              </div>
+
+              <div className="fld">
+                <label htmlFor="vendorCategory">Business category</label>
+                <select {...register("vendorCategory")} id="vendorCategory" aria-invalid={!!errors.vendorCategory} defaultValue="">
+                  <option value="" disabled>Select a category…</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Streetwear">Streetwear</option>
+                  <option value="Footwear">Footwear</option>
+                  <option value="Activewear">Activewear</option>
+                  <option value="Jewellery">Jewellery</option>
+                  <option value="Beauty">Beauty</option>
+                  <option value="Home & Living">Home &amp; Living</option>
+                  <option value="Health & Wellness">Health &amp; Wellness</option>
+                  <option value="Kids & Babywear">Kids &amp; Babywear</option>
+                  <option value="Other">Other</option>
+                </select>
+                {errors.vendorCategory && <span className="err">{errors.vendorCategory.message}</span>}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="vendorType">Platform <span className="opt">auto-detected</span></label>
+                <select {...register("vendorType")} id="vendorType" aria-invalid={!!errors.vendorType}>
+                  <option value="shopify">Shopify</option>
+                  <option value="woocommerce">WooCommerce</option>
+                  <option value="magento">Magento</option>
+                  <option value="custom">Custom platform</option>
+                  <option value="other">Other</option>
+                </select>
+                {errors.vendorType && <span className="err">{errors.vendorType.message}</span>}
+              </div>
+
+              <div className="fld full">
+                <label className="fld-check">
+                  <input {...register("acceptTerms")} type="checkbox" />
+                  <span>
+                    I accept the{" "}
+                    <a href="https://street.london/user-terms" target="_blank" rel="noopener noreferrer">terms and conditions</a>
+                    {" "}and the{" "}
+                    <a href="https://street.london/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>
+                    , and agree to STREET&apos;s retailer policies.
+                  </span>
                 </label>
-                <input
-                  {...register("lastName")}
-                  id="lastName"
-                  type="text"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                  placeholder="Doe"
-                />
-                {errors.lastName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-bold mb-2">
-                Email *
-              </label>
-              <input
-                {...register("email")}
-                id="email"
-                type="email"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="you@example.com"
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-bold mb-2">
-                Phone Number *
-              </label>
-              <input
-                {...register("phone")}
-                id="phone"
-                type="tel"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="07123456789 or +447123456789"
-              />
-              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
-            </div>
-
-            {/* Address */}
-            <div>
-              <label htmlFor="address" className="block text-sm font-bold mb-2">
-                Business Address *
-              </label>
-              <input
-                {...register("address")}
-                id="address"
-                type="text"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                placeholder="123 Main Street"
-              />
-              {errors.address && (
-                <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-              )}
-            </div>
-
-            {/* Country & Postcode */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="country" className="block text-sm font-bold mb-2">
-                  Country *
-                </label>
-                <input
-                  {...register("country")}
-                  id="country"
-                  type="text"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                  placeholder="United Kingdom"
-                />
-                {errors.country && (
-                  <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>
-                )}
+                {errors.acceptTerms && <span className="err">{errors.acceptTerms.message}</span>}
               </div>
 
-              <div>
-                <label htmlFor="postcode" className="block text-sm font-bold mb-2">
-                  Postcode
-                </label>
-                <input
-                  {...register("postcode")}
-                  id="postcode"
-                  type="text"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-                  placeholder="SW1A 1AA"
-                />
-                {errors.postcode && (
-                  <p className="text-red-500 text-sm mt-1">{errors.postcode.message}</p>
-                )}
+              <div className="form-foot">
+                <span className="note"><b>Auto-saved</b> · resume from this browser</span>
+                <button type="submit" className="btn" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" size={18} />
+                      Submitting…
+                    </>
+                  ) : (
+                    "Continue → set password"
+                  )}
+                </button>
               </div>
-            </div>
-
-            {/* Vendor Category */}
-            <div>
-              <label htmlFor="vendorCategory" className="block text-sm font-bold mb-2">
-                Business Category *
-              </label>
-              <select
-                {...register("vendorCategory")}
-                id="vendorCategory"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-              >
-                <option value="">Select a category</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Beauty">Beauty</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Home & Living">Home & Living</option>
-                <option value="Food & Beverage">Food & Beverage</option>
-                <option value="Sports & Outdoors">Sports & Outdoors</option>
-                <option value="Books & Media">Books & Media</option>
-                <option value="Toys & Games">Toys & Games</option>
-                <option value="Kids / Babywear">Kids / Babywear</option>
-                <option value="Health & Wellness">Health & Wellness</option>
-                <option value="Automotive">Automotive</option>
-                <option value="Pet Supplies">Pet Supplies</option>
-                <option value="Other">Other</option>
-              </select>
-              {errors.vendorCategory && (
-                <p className="text-red-500 text-sm mt-1">{errors.vendorCategory.message}</p>
-              )}
-            </div>
-
-            {/* Vendor Type */}
-            <div>
-              <label htmlFor="vendorType" className="block text-sm font-bold mb-2">
-                Platform Type *
-              </label>
-              <select
-                {...register("vendorType")}
-                id="vendorType"
-                className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-street-lime"
-              >
-                <option value="">Select your platform</option>
-                <option value="shopify">Shopify</option>
-                <option value="woocommerce">WooCommerce</option>
-                <option value="magento">Magento</option>
-                <option value="custom">Custom Platform</option>
-                <option value="other">Other</option>
-              </select>
-              {errors.vendorType && (
-                <p className="text-red-500 text-sm mt-1">{errors.vendorType.message}</p>
-              )}
-            </div>
-
-            {/* Terms & Conditions */}
-            <div className="flex items-start">
-              <input
-                {...register("acceptTerms")}
-                id="acceptTerms"
-                type="checkbox"
-                className="mt-1 mr-3 h-4 w-4 bg-gray-900 border-gray-800 rounded focus:ring-street-lime"
-              />
-              <label htmlFor="acceptTerms" className="text-sm text-gray-400">
-                I accept the{" "}
-                <a
-                  href="https://street.london/user-terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-street-lime hover:underline"
-                >
-                  terms and conditions
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://street.london/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-street-lime hover:underline"
-                >
-                  privacy policy
-                </a>{" "}
-                and agree to STREET&apos;s vendor policies *
-              </label>
-            </div>
-            {errors.acceptTerms && (
-              <p className="text-red-500 text-sm">{errors.acceptTerms.message}</p>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-street-lime hover:bg-street-lime/80 text-black font-bold py-4 px-8 rounded-lg text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="animate-spin mr-2" size={20} />
-                  Processing...
-                </>
-              ) : (
-                "Complete Onboarding"
-              )}
-            </button>
-          </form>
+            </form>
+          </div>
         </div>
-      </main>
+      </section>
 
-      <footer className="border-t border-gray-800 mt-20">
-        <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p>&copy; 2025 STREET. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      <Footer />
+    </>
   );
 }
