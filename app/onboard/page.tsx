@@ -279,8 +279,7 @@ export default function OnboardPage() {
               </div>
             </div>
             <p className="step-meta">
-              Approx. 4 minutes.<br />
-              Auto-saves on this device.
+              Approx. 4 minutes.
             </p>
           </header>
 
@@ -440,8 +439,7 @@ export default function OnboardPage() {
                 {errors.acceptTerms && <span className="err">{errors.acceptTerms.message}</span>}
               </div>
 
-              <div className="form-foot">
-                <span className="note"><b>Auto-saved</b> · resume from this browser</span>
+              <div className="form-foot" style={{ justifyContent: "flex-end" }}>
                 <button type="submit" className="btn" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
