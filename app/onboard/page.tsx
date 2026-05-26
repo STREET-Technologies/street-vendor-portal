@@ -224,6 +224,7 @@ export default function OnboardPage() {
         storeUrl: data.storeUrl,
         vendorType: data.vendorType,
         vendorCategory: data.vendorCategory,
+        ...(data.shippingReturnsUrl ? { shippingReturnsUrl: data.shippingReturnsUrl } : {}),
       });
       const { email, tempPassword } = response.data.data;
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
@@ -411,6 +412,25 @@ export default function OnboardPage() {
                   <option value="Other">Other</option>
                 </select>
                 {errors.vendorCategory && <span className="err">{errors.vendorCategory.message}</span>}
+              </div>
+
+              <div className="fld full">
+                <label htmlFor="shippingReturnsUrl">
+                  Shipping &amp; Returns URL
+                  <span className="opt">optional</span>
+                </label>
+                <input
+                  {...register("shippingReturnsUrl")}
+                  id="shippingReturnsUrl"
+                  type="url"
+                  placeholder="https://yourstore.com/pages/shipping-returns"
+                  aria-invalid={!!errors.shippingReturnsUrl}
+                />
+                {errors.shippingReturnsUrl ? (
+                  <span className="err">{errors.shippingReturnsUrl.message}</span>
+                ) : (
+                  <span className="hint">Link to your shipping &amp; returns policy. Shown to customers on product pages.</span>
+                )}
               </div>
 
               <div className="fld">

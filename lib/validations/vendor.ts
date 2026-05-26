@@ -48,6 +48,11 @@ export const vendorOnboardingSchema = z.object({
   ], {
     message: 'Please select a business category',
   }),
+  shippingReturnsUrl: z
+    .string()
+    .url('Must be a valid URL (e.g., https://yourstore.com/pages/shipping-returns)')
+    .optional()
+    .or(z.literal('')),
   acceptTerms: z.literal(true, {
     message: 'You must accept the terms and conditions',
   }),
