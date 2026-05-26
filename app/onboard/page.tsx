@@ -396,24 +396,6 @@ export default function OnboardPage() {
                 <input {...register("postcode")} id="postcode" type="text" placeholder="SW1A 1AA" />
               </div>
 
-              <div className="fld">
-                <label htmlFor="vendorCategory">Business category</label>
-                <select {...register("vendorCategory")} id="vendorCategory" aria-invalid={!!errors.vendorCategory} defaultValue="">
-                  <option value="" disabled>Select a category…</option>
-                  <option value="Fashion">Fashion</option>
-                  <option value="Streetwear">Streetwear</option>
-                  <option value="Footwear">Footwear</option>
-                  <option value="Activewear">Activewear</option>
-                  <option value="Jewellery">Jewellery</option>
-                  <option value="Beauty">Beauty</option>
-                  <option value="Home & Living">Home &amp; Living</option>
-                  <option value="Health & Wellness">Health &amp; Wellness</option>
-                  <option value="Kids & Babywear">Kids &amp; Babywear</option>
-                  <option value="Other">Other</option>
-                </select>
-                {errors.vendorCategory && <span className="err">{errors.vendorCategory.message}</span>}
-              </div>
-
               <div className="fld full">
                 <label htmlFor="shippingReturnsUrl">
                   Shipping &amp; Returns URL
@@ -431,6 +413,24 @@ export default function OnboardPage() {
                 ) : (
                   <span className="hint">Link to your shipping &amp; returns policy. Shown to customers on product pages.</span>
                 )}
+              </div>
+
+              <div className="fld">
+                <label htmlFor="vendorCategory">Business category</label>
+                <select {...register("vendorCategory")} id="vendorCategory" aria-invalid={!!errors.vendorCategory} defaultValue="">
+                  <option value="" disabled>Select a category…</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Streetwear">Streetwear</option>
+                  <option value="Footwear">Footwear</option>
+                  <option value="Activewear">Activewear</option>
+                  <option value="Jewellery">Jewellery</option>
+                  <option value="Beauty">Beauty</option>
+                  <option value="Home & Living">Home &amp; Living</option>
+                  <option value="Health & Wellness">Health &amp; Wellness</option>
+                  <option value="Kids & Babywear">Kids &amp; Babywear</option>
+                  <option value="Other">Other</option>
+                </select>
+                {errors.vendorCategory && <span className="err">{errors.vendorCategory.message}</span>}
               </div>
 
               <div className="fld">
