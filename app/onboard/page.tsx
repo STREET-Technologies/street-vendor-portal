@@ -11,6 +11,17 @@ import Nav from "../_components/Nav";
 import Footer from "../_components/Footer";
 import OnboardingSidebar from "../_components/OnboardingSidebar";
 
+type OnboardOutlet = {
+  id: string;
+  name: string;
+  address: string | null;
+  address2: string | null;
+  city: string | null;
+  postcode: string | null;
+  isPrimary: boolean;
+  isPublished: boolean;
+};
+
 interface PartialVendorData {
   storeName: string;
   vendorType: string;
@@ -63,6 +74,7 @@ export default function OnboardPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isCheckingStore, setIsCheckingStore] = useState(false);
   const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
+  const [outlets, setOutlets] = useState<OnboardOutlet[]>([]);
   // Tracks which fields were filled from Shopify so we can render the
   // "from Shopify" hint. Cleared per-field if the vendor edits the value.
   const [prefilledFields, setPrefilledFields] = useState<Set<ShopifyPrefillField>>(
@@ -152,13 +164,23 @@ export default function OnboardPage() {
         if (v.country) { setValue("country", v.country); filled.add("country"); }
         if (v.postcode) { setValue("postcode", v.postcode); filled.add("postcode"); }
         setPrefilledFields(filled);
+
+        // Populate outlet picker (TT-242). Only show when > 1 outlet.
+        const fetchedOutlets: OnboardOutlet[] = result.outlets ?? [];
+        setOutlets(fetchedOutlets);
+        if (fetchedOutlets.length > 1) {
+          const defaultOutlet = fetchedOutlets.find((o) => o.isPrimary) ?? fetchedOutlets[0];
+          setValue("primaryOutletId", defaultOutlet.id);
+        }
       } else {
         setPartialVendor(null);
         setPrefilledFields(new Set());
+        setOutlets([]);
       }
     } catch {
       setPartialVendor(null);
       setPrefilledFields(new Set());
+      setOutlets([]);
     } finally {
       setIsCheckingStore(false);
     }
@@ -194,6 +216,16 @@ export default function OnboardPage() {
       <span className="opt">from Shopify</span>
     ) : null;
 
+  // When the vendor selects a different outlet, prefill address/postcode from
+  // that outlet. Only overwrites when the outlet HAS the value (never clears).
+  // (city is not a standalone form field — it's embedded in the address line.)
+  const handleOutletChange = useCallback((outletId: string) => {
+    const outlet = outlets.find((o) => o.id === outletId);
+    if (!outlet) return;
+    if (outlet.address) setValue("address", outlet.address);
+    if (outlet.postcode) setValue("postcode", outlet.postcode);
+  }, [outlets, setValue]);
+
   const scheduleStoreCheck = useCallback((value: string) => {
     if (checkTimeoutRef.current) clearTimeout(checkTimeoutRef.current);
     checkTimeoutRef.current = setTimeout(() => checkStoreUrl(value.trim()), 300);
@@ -225,6 +257,7 @@ export default function OnboardPage() {
         vendorType: data.vendorType,
         vendorCategory: data.vendorCategory,
         ...(data.shippingReturnsUrl ? { shippingReturnsUrl: data.shippingReturnsUrl } : {}),
+        ...(data.primaryOutletId ? { primaryOutletId: data.primaryOutletId } : {}),
       });
       const { email, tempPassword } = response.data.data;
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
@@ -395,6 +428,70 @@ export default function OnboardPage() {
                 <label htmlFor="postcode">Postcode {shopifyHint("postcode")}</label>
                 <input {...register("postcode")} id="postcode" type="text" placeholder="SW1A 1AA" />
               </div>
+
+              {outlets.length > 1 && (
+                <div className="fld full">
+                  <label>Your locations</label>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "0.25rem" }}>
+                    {outlets.map((o) => {
+                      const addressLine = [o.address, o.city, o.postcode].filter(Boolean).join(", ");
+                      const isSelected = watch("primaryOutletId") === o.id;
+                      return (
+                        <label
+                          key={o.id}
+                          style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: "0.875rem",
+                            padding: "0.875rem 1rem",
+                            border: isSelected
+                              ? "2px solid var(--primary)"
+                              : "1px solid var(--rule-mid)",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            background: isSelected ? "rgba(198,255,0,0.06)" : "transparent",
+                            transition: "border-color 0.15s, background 0.15s",
+                          }}
+                        >
+                          <input
+                            type="radio"
+                            value={o.id}
+                            {...register("primaryOutletId", {
+                              onChange: (e) => handleOutletChange(e.target.value),
+                            })}
+                            style={{ marginTop: "0.2rem", accentColor: "var(--primary)", flexShrink: 0 }}
+                          />
+                          <span style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <b>{o.name}</b>
+                              {o.isPrimary && (
+                                <span
+                                  style={{
+                                    fontSize: "0.72rem",
+                                    fontWeight: 700,
+                                    letterSpacing: "0.04em",
+                                    textTransform: "uppercase",
+                                    background: "var(--primary)",
+                                    color: "var(--black)",
+                                    borderRadius: "3px",
+                                    padding: "0.1em 0.45em",
+                                  }}
+                                >
+                                  Suggested
+                                </span>
+                              )}
+                            </span>
+                            {addressLine && (
+                              <span style={{ fontSize: "0.875rem", color: "var(--gray-dark)" }}>{addressLine}</span>
+                            )}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  <span className="hint">Your other locations are saved and can go live later — no re-onboarding needed.</span>
+                </div>
+              )}
 
               <div className="fld full">
                 <label htmlFor="shippingReturnsUrl">
