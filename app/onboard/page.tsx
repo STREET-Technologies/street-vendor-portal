@@ -88,6 +88,7 @@ export default function OnboardPage() {
     register,
     handleSubmit,
     setValue,
+    getValues,
     reset,
     watch,
     formState: { errors },
@@ -167,24 +168,36 @@ export default function OnboardPage() {
 
         // Populate outlet picker (TT-242). Only show when > 1 outlet.
         const fetchedOutlets: OnboardOutlet[] = result.outlets ?? [];
-        setOutlets(fetchedOutlets);
         if (fetchedOutlets.length > 1) {
-          const defaultOutlet = fetchedOutlets.find((o) => o.isPrimary) ?? fetchedOutlets[0];
-          setValue("primaryOutletId", defaultOutlet.id);
+          setOutlets(fetchedOutlets);
+          // Only apply default when the current selection is not already a
+          // member of this store's outlets (i.e. don't clobber an explicit
+          // user choice on same-store re-check).
+          const current = getValues("primaryOutletId");
+          const stillValid = current && fetchedOutlets.some((o: OnboardOutlet) => o.id === current);
+          if (!stillValid) {
+            const defaultOutlet = fetchedOutlets.find((o: OnboardOutlet) => o.isPrimary) ?? fetchedOutlets[0];
+            setValue("primaryOutletId", defaultOutlet.id);
+          }
+        } else {
+          setOutlets(fetchedOutlets);
+          setValue("primaryOutletId", undefined);
         }
       } else {
         setPartialVendor(null);
         setPrefilledFields(new Set());
         setOutlets([]);
+        setValue("primaryOutletId", undefined);
       }
     } catch {
       setPartialVendor(null);
       setPrefilledFields(new Set());
       setOutlets([]);
+      setValue("primaryOutletId", undefined);
     } finally {
       setIsCheckingStore(false);
     }
-  }, [setValue]);
+  }, [setValue, getValues]);
 
   // Clear the "from Shopify" hint on a field once the vendor edits it.
   // Watching individual fields keeps the hint accurate without churn.
@@ -489,7 +502,7 @@ export default function OnboardPage() {
                       );
                     })}
                   </div>
-                  <span className="hint">Your other locations are saved and can go live later — no re-onboarding needed.</span>
+                  <span className="hint">Your other locations are saved and can go live later, no re-onboarding needed.</span>
                 </div>
               )}
 
