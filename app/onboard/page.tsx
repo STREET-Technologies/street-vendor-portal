@@ -291,7 +291,6 @@ export default function OnboardPage() {
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-block">
-            <p className="hero-eyebrow">Shopify install complete</p>
             <h1>You&apos;re in. Let&apos;s finish setting up your store.</h1>
             <p className="lede">
               The STREET app is installed on your Shopify store. We just need a few details to publish you to
@@ -315,7 +314,6 @@ export default function OnboardPage() {
         <div className="container">
           <header className="apply-head">
             <div>
-              <p className="section-eyebrow">Step 02 of 05</p>
               <h2 className="section-title">Confirm your store details.</h2>
               <div className="stepbar" aria-hidden="true">
                 <div className="stp done" />
@@ -325,9 +323,6 @@ export default function OnboardPage() {
                 <div className="stp" />
               </div>
             </div>
-            <p className="step-meta">
-              Approx. 4 minutes.
-            </p>
           </header>
 
           {submitError && (

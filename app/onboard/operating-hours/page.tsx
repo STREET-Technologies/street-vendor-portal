@@ -178,7 +178,6 @@ function OperatingHoursForm() {
         <div className="container">
           <header className="apply-head">
             <div>
-              <p className="section-eyebrow">Step 04 of 05</p>
               <h2 className="section-title">Set your operating hours.</h2>
               <div className="stepbar" aria-hidden="true">
                 <div className="stp done" />

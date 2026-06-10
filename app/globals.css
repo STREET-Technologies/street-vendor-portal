@@ -112,16 +112,6 @@ button { cursor: pointer; }
   align-items: center;
 }
 .hero-block { max-width: none; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 0.625rem;
-  font-size: 0.82rem; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gray-dark);
-  margin-bottom: 1.25rem;
-}
-.hero-eyebrow::before {
-  content: ''; width: 1.5rem; height: 2px; background: var(--primary);
-}
 .hero h1 {
   font-family: var(--font-title);
   font-size: clamp(2rem, 3.6vw, 2.875rem);
@@ -144,20 +134,7 @@ button { cursor: pointer; }
 }
 .hero-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* ─── Section eyebrows + titles ────────────────────────── */
-.section-eyebrow {
-  display: inline-block;
-  font-size: 0.82rem; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--gray-dark);
-  margin-bottom: 0.6rem;
-}
-.section-eyebrow::before {
-  content: ''; display: inline-block;
-  width: 1rem; height: 2px;
-  background: var(--primary);
-  vertical-align: middle; margin-right: 0.625rem;
-}
+/* ─── Section titles ───────────────────────────────────── */
 .section-title {
   font-family: var(--font-title);
   font-size: clamp(1.875rem, 3.4vw, 2.5rem);
@@ -415,10 +392,10 @@ button { cursor: pointer; }
 }
 .footer-links {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
   justify-self: end;
-  max-width: 24rem;
+  max-width: 32rem;
   width: 100%;
 }
 .footer-column { display: flex; flex-direction: column; gap: 0.75rem; }
