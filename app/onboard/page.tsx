@@ -445,58 +445,25 @@ export default function OnboardPage() {
               {outlets.length > 1 && (
                 <div className="fld full">
                   <label>Your locations</label>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "0.25rem" }}>
+                  <div className="outlet-cards">
                     {outlets.map((o) => {
                       const addressLine = [o.address, o.city, o.postcode].filter(Boolean).join(", ");
                       const isSelected = watch("primaryOutletId") === o.id;
                       return (
-                        <label
-                          key={o.id}
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: "0.875rem",
-                            padding: "0.875rem 1rem",
-                            border: isSelected
-                              ? "2px solid var(--primary)"
-                              : "1px solid var(--rule-mid)",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            background: isSelected ? "rgba(198,255,0,0.06)" : "transparent",
-                            transition: "border-color 0.15s, background 0.15s",
-                          }}
-                        >
+                        <label key={o.id} className={`outlet-card${isSelected ? " selected" : ""}`}>
                           <input
                             type="radio"
                             value={o.id}
                             {...register("primaryOutletId", {
                               onChange: (e) => handleOutletChange(e.target.value),
                             })}
-                            style={{ marginTop: "0.2rem", accentColor: "var(--primary)", flexShrink: 0 }}
                           />
-                          <span style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-                            <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span className="outlet-body">
+                            <span className="outlet-title">
                               <b>{o.name}</b>
-                              {o.isPrimary && (
-                                <span
-                                  style={{
-                                    fontSize: "0.72rem",
-                                    fontWeight: 700,
-                                    letterSpacing: "0.04em",
-                                    textTransform: "uppercase",
-                                    background: "var(--primary)",
-                                    color: "var(--black)",
-                                    borderRadius: "3px",
-                                    padding: "0.1em 0.45em",
-                                  }}
-                                >
-                                  Suggested
-                                </span>
-                              )}
+                              {o.isPrimary && <span className="outlet-pill">Suggested</span>}
                             </span>
-                            {addressLine && (
-                              <span style={{ fontSize: "0.875rem", color: "var(--gray-dark)" }}>{addressLine}</span>
-                            )}
+                            {addressLine && <span className="outlet-addr">{addressLine}</span>}
                           </span>
                         </label>
                       );
