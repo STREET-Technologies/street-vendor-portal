@@ -306,6 +306,48 @@ button { cursor: pointer; }
 }
 .fld-check a:hover { border-bottom-color: var(--black); }
 
+/* outlet picker (TT-242) — radio cards for multi-location onboarding */
+.outlet-cards {
+  display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.25rem;
+}
+.outlet-card {
+  display: flex; align-items: flex-start; gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--rule-mid);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.outlet-card.selected {
+  border: 2px solid var(--primary);
+  background: rgba(198, 255, 0, 0.06);
+  /* keep 1px-vs-2px border from shifting layout */
+  padding: calc(0.875rem - 1px) calc(1rem - 1px);
+}
+/* exception to the global .fld input sizing — same pattern as .fld-check */
+.outlet-card input[type="radio"] {
+  width: 1.05rem; height: 1.05rem; margin-top: 0.18rem;
+  padding: 0; border: none; background: transparent;
+  flex: 0 0 auto;
+  accent-color: var(--primary);
+}
+.outlet-card .outlet-body {
+  display: flex; flex-direction: column; gap: 0.2rem;
+  flex: 1; min-width: 0;
+}
+.outlet-card .outlet-title {
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+}
+.outlet-card .outlet-pill {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--primary); color: var(--black);
+  border-radius: 3px; padding: 0.1em 0.45em;
+}
+.outlet-card .outlet-addr {
+  font-size: 0.875rem; color: var(--gray-dark);
+}
+
 /* form footer (submit row) */
 .form-foot {
   grid-column: 1 / -1;

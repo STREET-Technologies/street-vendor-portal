@@ -56,6 +56,7 @@ export const vendorOnboardingSchema = z.object({
   acceptTerms: z.literal(true, {
     message: 'You must accept the terms and conditions',
   }),
+  primaryOutletId: z.string().uuid().optional(),
 });
 
 export type VendorOnboardingFormData = z.infer<typeof vendorOnboardingSchema>;
