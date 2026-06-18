@@ -81,21 +81,21 @@ function SetPasswordForm() {
       <section className="apply">
         <div className="container">
           {done ? (
-            <div className="apply-head">
-              <div>
-                <h2 className="section-title">
-                  <CheckCircle2 size={28} style={{ verticalAlign: "-5px", marginRight: 8 }} />
-                  Password set.
-                </h2>
-                <p className="step-meta" style={{ marginTop: 12 }}>
-                  Open the STREET Retailer app and log in with your new password.
-                </p>
-                <p style={{ marginTop: 24 }}>
-                  <a href={RETAILER_APP_URL} className="btn">
-                    Open STREET Retailer
-                  </a>
-                </p>
-              </div>
+            <div style={{ maxWidth: 560, padding: "48px 0" }}>
+              <CheckCircle2
+                size={40}
+                strokeWidth={2}
+                style={{ color: "#16a34a", marginBottom: 16 }}
+              />
+              <h2 className="section-title" style={{ margin: "0 0 12px" }}>
+                Password set.
+              </h2>
+              <p style={{ color: "#555", fontSize: 16, lineHeight: 1.5, margin: "0 0 28px" }}>
+                Open the STREET Retailer app and log in with your new password.
+              </p>
+              <a href={RETAILER_APP_URL} className="btn">
+                Open STREET Retailer
+              </a>
             </div>
           ) : (
             <>
