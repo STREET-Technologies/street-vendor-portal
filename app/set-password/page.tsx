@@ -75,126 +75,130 @@ function SetPasswordForm() {
     }
   };
 
+  if (done) {
+    return (
+      <>
+        <Nav />
+        <section className="center-section">
+          <div className="container center-block">
+            <div className="check"><CheckCircle2 size={32} strokeWidth={2.25} /></div>
+            <h1>Password set.</h1>
+            <p className="lede">Open the STREET Retailer app and log in with your new password.</p>
+            <div className="cta-row">
+              <a
+                href={RETAILER_APP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Open STREET Retailer &rarr;
+              </a>
+            </div>
+            <p className="help-line">
+              Need help? <a href="mailto:support@street.london">support@street.london</a>
+            </p>
+          </div>
+        </section>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Nav />
       <section className="apply">
         <div className="container">
-          {done ? (
-            <div style={{ maxWidth: 560, padding: "48px 0" }}>
-              <CheckCircle2
-                size={40}
-                strokeWidth={2}
-                style={{ color: "#16a34a", marginBottom: 16 }}
-              />
-              <h2 className="section-title" style={{ margin: "0 0 12px" }}>
-                Password set.
-              </h2>
-              <p style={{ color: "#555", fontSize: 16, lineHeight: 1.5, margin: "0 0 28px" }}>
-                Open the STREET Retailer app and log in with your new password.
-              </p>
-              <a href={RETAILER_APP_URL} className="btn">
-                Open STREET Retailer
-              </a>
+          <header className="apply-head">
+            <div>
+              <h2 className="section-title">Set your password.</h2>
             </div>
-          ) : (
-            <>
-              <header className="apply-head">
-                <div>
-                  <h2 className="section-title">Set your password.</h2>
-                </div>
-                <p className="step-meta">
-                  One minute.<br />
-                  Replaces the temporary password we emailed you.
-                </p>
-              </header>
+          </header>
 
-              {!linkValid && (
-                <div className="alert alert-error" role="alert">
-                  <b>Invalid link:</b>
-                  <span>This set-password link is missing details. Please use the link from your invite email.</span>
-                </div>
-              )}
-
-              {submitError && (
-                <div className="alert alert-error" role="alert">
-                  <b>Couldn&apos;t set:</b><span>{submitError}</span>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit(onSubmit)} className="form-grid" noValidate>
-                {email && (
-                  <div className="fld full">
-                    <label htmlFor="email">Email address</label>
-                    <input id="email" type="email" value={email} disabled readOnly />
-                  </div>
-                )}
-
-                <div className="fld full">
-                  <label htmlFor="newPassword">
-                    New password
-                    <span className="opt">min 8 chars, mix of letters and a number</span>
-                  </label>
-                  <div className="pwd-wrap">
-                    <input
-                      {...register("newPassword")}
-                      id="newPassword"
-                      type={showNewPassword ? "text" : "password"}
-                      placeholder="Choose a secure password"
-                      aria-invalid={!!errors.newPassword}
-                      disabled={!linkValid}
-                    />
-                    <button
-                      type="button"
-                      className="pwd-toggle"
-                      onClick={() => setShowNewPassword((v) => !v)}
-                      aria-label={showNewPassword ? "Hide password" : "Show password"}
-                    >
-                      {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                  {errors.newPassword && <span className="err">{errors.newPassword.message}</span>}
-                </div>
-
-                <div className="fld full">
-                  <label htmlFor="confirmPassword">Confirm new password</label>
-                  <div className="pwd-wrap">
-                    <input
-                      {...register("confirmPassword")}
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Re-enter the new password"
-                      aria-invalid={!!errors.confirmPassword}
-                      disabled={!linkValid}
-                    />
-                    <button
-                      type="button"
-                      className="pwd-toggle"
-                      onClick={() => setShowConfirmPassword((v) => !v)}
-                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                    >
-                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                  {errors.confirmPassword && <span className="err">{errors.confirmPassword.message}</span>}
-                </div>
-
-                <div className="form-foot">
-                  <span className="note"><b>Secure</b> · stored hashed, never visible to us</span>
-                  <button type="submit" className="btn" disabled={isSubmitting || !linkValid}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="animate-spin" size={18} />
-                        Setting…
-                      </>
-                    ) : (
-                      "Set password"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </>
+          {!linkValid && (
+            <div className="alert alert-error" role="alert">
+              <b>Invalid link:</b>
+              <span>This set-password link is missing details. Please use the link from your invite email.</span>
+            </div>
           )}
+
+          {submitError && (
+            <div className="alert alert-error" role="alert">
+              <b>Couldn&apos;t set:</b><span>{submitError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="form-grid" noValidate>
+            {email && (
+              <div className="fld full">
+                <label htmlFor="email">Email address</label>
+                <input id="email" type="email" value={email} disabled readOnly />
+              </div>
+            )}
+
+            <div className="fld full">
+              <label htmlFor="newPassword">
+                New password
+                <span className="opt">min 8 chars, mix of letters and a number</span>
+              </label>
+              <div className="pwd-wrap">
+                <input
+                  {...register("newPassword")}
+                  id="newPassword"
+                  type={showNewPassword ? "text" : "password"}
+                  placeholder="Choose a secure password"
+                  aria-invalid={!!errors.newPassword}
+                  disabled={!linkValid}
+                />
+                <button
+                  type="button"
+                  className="pwd-toggle"
+                  onClick={() => setShowNewPassword((v) => !v)}
+                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                >
+                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.newPassword && <span className="err">{errors.newPassword.message}</span>}
+            </div>
+
+            <div className="fld full">
+              <label htmlFor="confirmPassword">Confirm new password</label>
+              <div className="pwd-wrap">
+                <input
+                  {...register("confirmPassword")}
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Re-enter the new password"
+                  aria-invalid={!!errors.confirmPassword}
+                  disabled={!linkValid}
+                />
+                <button
+                  type="button"
+                  className="pwd-toggle"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.confirmPassword && <span className="err">{errors.confirmPassword.message}</span>}
+            </div>
+
+            <div className="form-foot">
+              <span className="note"><b>Secure</b> · stored hashed, never visible to us</span>
+              <button type="submit" className="btn" disabled={isSubmitting || !linkValid}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    Setting…
+                  </>
+                ) : (
+                  "Set password"
+                )}
+              </button>
+            </div>
+          </form>
         </div>
       </section>
       <Footer />
