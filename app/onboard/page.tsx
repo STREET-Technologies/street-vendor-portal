@@ -80,6 +80,12 @@ export default function OnboardPage() {
   // submit early and tell them, instead of letting them fill the whole form and
   // only failing at the backend gate on submit.
   const [storeNotInstalled, setStoreNotInstalled] = useState(false);
+  // TT-359 / App Store req 2.3.1: when the merchant arrives from the embedded
+  // Shopify app the store is passed as ?shop=<domain>. We prefill and LOCK the
+  // store field so identity is derived from the install, never typed. Direct
+  // visitors (no shop param) keep the editable field, still backed by the
+  // server-side install gate on submit.
+  const [storeLocked, setStoreLocked] = useState(false);
   const [outlets, setOutlets] = useState<OnboardOutlet[]>([]);
   // Tracks which fields were filled from Shopify so we can render the
   // "from Shopify" hint. Cleared per-field if the vendor edits the value.
@@ -212,6 +218,22 @@ export default function OnboardPage() {
       setIsCheckingStore(false);
     }
   }, [setValue, getValues]);
+
+  // Arrive-from-app flow: if the embedded Shopify app deep-linked here with
+  // ?shop=<domain>, prefill the store URL, lock it, and run the install check
+  // immediately. The reviewer (and every real merchant) never types a store
+  // URL — it's carried from the app install. Runs after localStorage hydration
+  // so it always wins over any stale saved storeUrl.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const shop = new URLSearchParams(window.location.search).get("shop")?.trim();
+    if (!shop) return;
+    setValue("storeUrl", shop);
+    setStoreLocked(true);
+    checkStoreUrl(shop);
+    // Run once on mount; checkStoreUrl/setValue are stable useCallbacks.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Clear the "from Shopify" hint on a field once the vendor edits it.
   // Watching individual fields keeps the hint accurate without churn.
@@ -364,17 +386,20 @@ export default function OnboardPage() {
               <div className="fld full">
                 <label htmlFor="storeUrl">
                   Store URL
-                  <span className="opt">pre-filled from Shopify</span>
+                  <span className="opt">{storeLocked ? "from your Shopify install" : "pre-filled from Shopify"}</span>
                 </label>
                 <div style={{ position: "relative" }}>
                   <input
                     {...register("storeUrl")}
                     id="storeUrl"
                     type="text"
-                    onBlur={handleStoreUrlBlur}
-                    onPaste={handleStoreUrlPaste}
-                    placeholder="yourstore.myshopify.com or yourdomain.com"
+                    readOnly={storeLocked}
+                    onBlur={storeLocked ? undefined : handleStoreUrlBlur}
+                    onPaste={storeLocked ? undefined : handleStoreUrlPaste}
+                    placeholder={storeLocked ? undefined : "yourstore.myshopify.com or yourdomain.com"}
                     aria-invalid={!!errors.storeUrl}
+                    aria-readonly={storeLocked}
+                    style={storeLocked ? { background: "var(--gray-light, #f5f5f5)", cursor: "not-allowed" } : undefined}
                   />
                   {isCheckingStore && (
                     <Loader2
@@ -386,6 +411,8 @@ export default function OnboardPage() {
                 </div>
                 {errors.storeUrl ? (
                   <span className="err">{errors.storeUrl.message}</span>
+                ) : storeLocked ? (
+                  <span className="hint">Confirmed from the store you installed the STREET app on.</span>
                 ) : (
                   <span className="hint">Strip <b>http://</b> and <b>www.</b>; we&apos;ll auto-detect your platform from the URL.</span>
                 )}
