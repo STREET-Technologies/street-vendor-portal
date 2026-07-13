@@ -74,6 +74,12 @@ export default function OnboardPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isCheckingStore, setIsCheckingStore] = useState(false);
   const [partialVendor, setPartialVendor] = useState<PartialVendorData | null>(null);
+  // TT-359: a store with no install-backed partial vendor cannot be onboarded.
+  // check-store returning exists:false means the STREET app was never installed
+  // on this URL (or a different URL than the installed one was typed). Block
+  // submit early and tell them, instead of letting them fill the whole form and
+  // only failing at the backend gate on submit.
+  const [storeNotInstalled, setStoreNotInstalled] = useState(false);
   const [outlets, setOutlets] = useState<OnboardOutlet[]>([]);
   // Tracks which fields were filled from Shopify so we can render the
   // "from Shopify" hint. Cleared per-field if the vendor edits the value.
@@ -141,15 +147,18 @@ export default function OnboardPage() {
     if (!storeUrl || storeUrl.length < 4) {
       setPartialVendor(null);
       setPrefilledFields(new Set());
+      setStoreNotInstalled(false);
       return;
     }
     setIsCheckingStore(true);
+    setStoreNotInstalled(false);
     try {
       const response = await apiClient.get("/vendors/check-store", { params: { storeUrl } });
       const result = response.data?.data;
       if (result?.exists && result.vendor) {
         const v = result.vendor as PartialVendorData;
         setPartialVendor(v);
+        setStoreNotInstalled(false);
 
         // Pre-fill every field Shopify supplied at install time. Vendor can
         // edit anything; the "from Shopify" hint clears on edit (handled via
@@ -184,16 +193,21 @@ export default function OnboardPage() {
           setValue("primaryOutletId", undefined);
         }
       } else {
+        // Definitive "no install for this URL" — block onboarding.
         setPartialVendor(null);
         setPrefilledFields(new Set());
         setOutlets([]);
         setValue("primaryOutletId", undefined);
+        setStoreNotInstalled(true);
       }
     } catch {
+      // Network/lookup error is not proof of "no install" — don't hard-block
+      // here; the backend gate on submit stays the authoritative stop.
       setPartialVendor(null);
       setPrefilledFields(new Set());
       setOutlets([]);
       setValue("primaryOutletId", undefined);
+      setStoreNotInstalled(false);
     } finally {
       setIsCheckingStore(false);
     }
@@ -370,6 +384,14 @@ export default function OnboardPage() {
                 ) : (
                   <span className="hint">Strip <b>http://</b> and <b>www.</b>; we&apos;ll auto-detect your platform from the URL.</span>
                 )}
+                {storeNotInstalled && !isCheckingStore && (
+                  <div className="alert alert-error" role="alert" style={{ marginTop: "0.75rem" }}>
+                    <b>STREET app not installed on this store.</b>
+                    <span>
+                      Install the STREET app on this Shopify store first, then come back and onboard using that same store URL. If you already installed it, enter the exact store URL you installed it on.
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="fld full">
@@ -532,7 +554,7 @@ export default function OnboardPage() {
               </div>
 
               <div className="form-foot" style={{ justifyContent: "flex-end" }}>
-                <button type="submit" className="btn" disabled={isSubmitting}>
+                <button type="submit" className="btn" disabled={isSubmitting || isCheckingStore || storeNotInstalled}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={18} />
