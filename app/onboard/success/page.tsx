@@ -15,7 +15,7 @@ export default function OnboardingSuccessPage() {
           <div className="next-card">
             <h2>What&apos;s next</h2>
             <ol>
-              <li>Log into the Partner app: use the email and password you just set in onboarding.</li>
+              <li>Set up your counter tablet: any spare Android tablet or iPad. Open the Partner app on it, log in with the email and password you just set, and add it to the home screen. Keep it by the till, plugged in, with the app open. It is your order alarm.</li>
               <li>Set your STREET catalog from your Shopify admin. The STREET app there is the fastest way to bulk-toggle visibility on your products.</li>
               <li>Wait for your first STREET order. Accept it in the Partner app, pack the items, mark it ready for collection, and our rider takes it from there.</li>
             </ol>
