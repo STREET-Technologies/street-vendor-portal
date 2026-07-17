@@ -306,7 +306,12 @@ export default function OnboardPage() {
         vendorType: data.vendorType,
         vendorCategory: data.vendorCategory,
         ...(data.shippingReturnsUrl ? { shippingReturnsUrl: data.shippingReturnsUrl } : {}),
-        ...(data.primaryOutletId ? { primaryOutletId: data.primaryOutletId } : {}),
+        // TT-370: only submit an outlet id that belongs to the freshly fetched
+        // outlet list — localStorage rehydration can carry a stale id from a
+        // previous store's session, which the backend rejects.
+        ...(data.primaryOutletId && outlets.some((o) => o.id === data.primaryOutletId)
+          ? { primaryOutletId: data.primaryOutletId }
+          : {}),
       });
       const { email, tempPassword } = response.data.data;
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
