@@ -136,8 +136,19 @@ pointer, so it does not actually decouple the deploys, and it complicates the Ve
    390. **Checked with screenshots at both widths, not inferred from the diff** — a past mobile fix
    silently removed the desktop rail.
 4. `curl -I` against the staging deploy returns `X-Robots-Tag: noindex, nofollow` on guide pages.
-5. Funnel regression: `/` redirects to `/onboard`; `/?shop=<domain>` redirects to
-   `/onboard?shop=<domain>` with the store URL prefilled and read-only.
+5. Funnel regression: `/` redirects to `/onboard`, and `app/page.tsx` is byte-for-byte unchanged
+   by this branch.
+
+   Correction found during verification: `?shop` preservation is **not present on `staging`**.
+   `staging` is missing four `master` commits with no staging counterpart — `594cc17` (preserve
+   `?shop` on the root redirect), `e94dd3d` (TT-359 prefill + lock store URL, App Store req
+   2.3.1), `d1a7e5e` (TT-365 counter-tablet callout on the completion page) and `6f599ad`
+   (TT-250 phone validation). On `staging`, `app/page.tsx` is the bare `redirect("/onboard")`, so
+   `/?shop=X` drops the parameter. This branch does not touch that file and therefore neither
+   causes nor fixes it. Reconciling the two branches is out of scope for TT-377.
+
+   Related: Task 3 edits `app/onboard/complete/page.tsx`, which `master` has independently
+   diverged on via TT-365. Expect a conflict there whenever `staging` is merged to `master`.
 6. Navigating `/guide` then back to `/onboard` in one session leaves the funnel visually unchanged.
 7. `npm run build` succeeds and guide pages are statically generated.
 8. Deployed to the `staging` branch only.
