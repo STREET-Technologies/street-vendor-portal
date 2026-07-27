@@ -4,16 +4,11 @@ import { describe, expect, it } from "vitest";
 import { GUIDE_BASE, getAllSlugs, getDoc, getNav } from "./content";
 
 const countMd = (dir: string): number =>
-  readdirSync(dir, { withFileTypes: true }).reduce(
-    (n, e) =>
-      n +
-      (e.isDirectory() && !e.name.startsWith("_") && !e.name.startsWith(".")
-        ? countMd(join(dir, e.name))
-        : e.name.endsWith(".md")
-          ? 1
-          : 0),
-    0
-  );
+  readdirSync(dir, { withFileTypes: true }).reduce((n, e) => {
+    if (e.name.startsWith("_") || e.name.startsWith(".")) return n;
+    if (e.isDirectory()) return n + countMd(join(dir, e.name));
+    return n + (e.name.endsWith(".md") ? 1 : 0);
+  }, 0);
 
 describe("GUIDE_BASE", () => {
   it("namespaces the guide under /guide", () => {
