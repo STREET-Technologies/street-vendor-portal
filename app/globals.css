@@ -102,6 +102,7 @@ button { cursor: pointer; }
   padding-bottom: 1px;
 }
 .nav-meta a:hover { border-bottom-color: var(--black); }
+@media (max-width: 420px) { .logo-sub { display: none; } }
 
 /* ─── Hero ─────────────────────────────────────────────── */
 .hero { padding: 2.75rem 0 3rem; }
