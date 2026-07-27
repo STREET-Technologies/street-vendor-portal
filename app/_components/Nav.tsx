@@ -9,6 +9,7 @@ export default function Nav() {
           <span className="logo-sub">Onboarding</span>
         </div>
         <div className="nav-meta">
+          <Link href="/guide">Guide</Link>
           <a href="https://street.london" target="_blank" rel="noopener noreferrer">street.london ↗</a>
         </div>
       </div>

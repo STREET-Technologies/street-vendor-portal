@@ -1,0 +1,312 @@
+/* Retailer guide (TT-377).
+   Every selector is scoped to .guide so guide CSS can never reach the
+   onboarding funnel after a client-side navigation.
+   Colours, fonts and motion come from globals.css :root — never redefine them
+   here. Only guide-local layout dimensions live on .guide below. */
+
+.guide {
+  --sidebar-w: 17rem;
+  --content-w: 46rem;
+
+  /* globals.css sets 15px/1.6 for the funnel; the guide's editorial rhythm
+     was designed at 16px/1.65 and line-height is inherited. */
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* ─── Shell (sidebar + content) ────────────────────────── */
+/* max-width matches globals.css .container so the nav, guide body and
+   footer share one gutter. */
+.guide .shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: start;
+}
+.guide .guidenav {
+  position: sticky;
+  top: 4.6rem;
+  align-self: start;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+.guide .guidenav__summary { display: none; } /* desktop: list always shown */
+.guide .sidebar { display: block; padding: 2.25rem 0 3rem; }
+.guide .sidebar__group { margin-bottom: 1.65rem; }
+.guide .sidebar__title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin: 0 0 0.55rem;
+}
+.guide .sidebar__list { list-style: none; margin: 0; padding: 0; }
+.guide .sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.7rem 0.32rem 0.75rem;
+  margin-left: -0.75rem;
+  border-radius: 7px;
+  font-size: 0.93rem;
+  color: var(--gray-dark);
+  border-left: 2px solid transparent;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.guide .sidebar__link:hover { color: var(--black); }
+.guide .sidebar__link[aria-current="page"] {
+  color: var(--black);
+  font-weight: 600;
+  border-left-color: var(--primary);
+}
+.guide .sidebar__dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--gray); flex: none;
+}
+.guide .sidebar__link[aria-current="page"] .sidebar__dot { background: var(--black); }
+
+/* ─── Content column ───────────────────────────────────── */
+.guide .main { padding: 2.5rem 0 5rem; min-width: 0; }
+.guide .content { max-width: var(--content-w); }
+
+.guide .crumbs {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1.2rem;
+}
+.guide .crumbs a:hover { color: var(--black); }
+.guide .crumbs span { margin: 0 0.4rem; }
+
+.guide .doc-head { margin-bottom: 1.6rem; }
+.guide .doc-head h1 {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 0.2rem 0 0;
+}
+.guide .meta-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-top: 0.9rem;
+  font-size: 0.78rem; color: var(--gray-dark);
+}
+.guide .updated { letter-spacing: 0.04em; text-transform: uppercase; }
+.guide .pill-draft {
+  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--white); color: var(--gray-dark);
+  border: 1px solid var(--rule-mid);
+  padding: 0.18rem 0.5rem; border-radius: 999px;
+}
+
+/* ─── Article typography ───────────────────────────────── */
+.guide .doc { font-size: 1.02rem; }
+.guide .doc > :first-child { margin-top: 0; }
+.guide .doc h2 {
+  font-size: 1.4rem; font-weight: 700; line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 2.4rem 0 0.85rem;
+  padding-top: 1.6rem; border-top: 1px solid var(--rule);
+}
+.guide .doc h3 {
+  font-size: 1.08rem; font-weight: 700;
+  margin: 1.8rem 0 0.6rem;
+}
+.guide .doc p { margin: 0 0 1.05rem; }
+.guide .doc strong { font-weight: 700; }
+.guide .doc ul, .guide .doc ol { margin: 0 0 1.15rem; padding-left: 1.3rem; }
+.guide .doc li { margin: 0.4rem 0; padding-left: 0.2rem; }
+.guide .doc li::marker { color: var(--gray); }
+.guide .doc a:not(.wikilink) {
+  border-bottom: 1px solid var(--rule-strong);
+  transition: border-color var(--t-fast);
+}
+.guide .doc a:not(.wikilink):hover { border-bottom-color: var(--black); }
+.guide .doc hr { border: 0; border-top: 1px solid var(--rule); margin: 2.2rem 0; }
+.guide .doc code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.86em;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.12em 0.38em; border-radius: 4px;
+}
+.guide .doc table {
+  width: 100%; border-collapse: collapse; margin: 0 0 1.3rem;
+  font-size: 0.95rem;
+}
+.guide .doc th, .guide .doc td {
+  text-align: left; padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--rule);
+}
+.guide .doc th { font-weight: 600; }
+
+/* GFM task lists (the going-live checklist) */
+.guide .doc input[type="checkbox"] {
+  width: 1.02em; height: 1.02em; margin-right: 0.55rem;
+  accent-color: var(--primary);
+  vertical-align: -0.12em;
+}
+.guide .doc li:has(> input[type="checkbox"]) { list-style: none; margin-left: -1.1rem; }
+
+/* ─── Lead / "In short" ────────────────────────────────── */
+.guide .doc .lead {
+  font-size: 1.18rem;
+  line-height: 1.5;
+  color: var(--black);
+  margin-bottom: 1.6rem;
+}
+.guide .doc .lead strong {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gray-dark);
+  margin-bottom: 0.35rem;
+}
+
+/* ─── Callouts ─────────────────────────────────────────── */
+.guide .doc blockquote {
+  margin: 1.5rem 0;
+  padding: 0.1rem 0 0.1rem 1.15rem;
+  border-left: 3px solid var(--rule-strong);
+  color: var(--gray-dark);
+}
+.guide .doc blockquote p:last-child { margin-bottom: 0; }
+.guide .doc .callout--watch {
+  border-left: 3px solid var(--primary);
+  background: rgba(198, 255, 0, 0.08);
+  padding: 1rem 1.2rem;
+  border-radius: 0 10px 10px 0;
+  color: var(--black);
+}
+.guide .callout__label {
+  display: inline-block;
+  font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #5b6b00;
+  margin-right: 0.5rem;
+  transform: translateY(-0.05em);
+}
+
+/* ─── Wiki-links ───────────────────────────────────────── */
+.guide .wikilink {
+  color: var(--black);
+  font-weight: 500;
+  box-shadow: inset 0 -0.5em 0 var(--primary-ring);
+  transition: box-shadow var(--t-fast);
+}
+.guide .wikilink:hover { box-shadow: inset 0 -1.1em 0 var(--primary-ring); }
+.guide .wikilink--missing { color: var(--gray); box-shadow: none; cursor: not-allowed; }
+
+/* ─── Index page ───────────────────────────────────────── */
+/* .guide-hero, not .hero: the funnel's .hero is unscoped and would leak in. */
+.guide .guide-hero {
+  padding: 4rem 0 2.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.guide .guide-hero__eyebrow {
+  font-size: 0.74rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gray-dark); margin: 0 0 1rem;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.guide .guide-hero__eyebrow::before {
+  content: ""; width: 1.6rem; height: 2px; background: var(--primary);
+}
+.guide .guide-hero h1 {
+  font-family: var(--font-title); font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  line-height: 1.02; letter-spacing: -0.02em;
+  margin: 0; max-width: 16ch;
+}
+.guide .guide-hero__lede {
+  margin: 1.2rem 0 0; max-width: 54ch;
+  font-size: 1.12rem; color: var(--gray-dark);
+}
+.guide .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 1.1rem;
+  padding: 2.75rem 0 5rem;
+}
+.guide .card {
+  border: 1px solid var(--rule-mid);
+  border-radius: 12px;
+  padding: 1.4rem 1.4rem 1.2rem;
+  background: var(--white);
+  transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+.guide .card:hover {
+  border-color: var(--rule-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+.guide .card__kicker {
+  font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray); margin: 0 0 0.55rem;
+}
+.guide .card__title {
+  font-size: 1.18rem; font-weight: 700; letter-spacing: -0.01em;
+  margin: 0 0 0.9rem;
+}
+.guide .card__list { list-style: none; margin: 0; padding: 0; }
+.guide .card__list li { margin: 0; }
+.guide .card__list a {
+  display: block;
+  padding: 0.33rem 0;
+  font-size: 0.95rem; color: var(--gray-dark);
+  border-bottom: 1px solid var(--rule);
+  transition: color var(--t-fast), padding var(--t-fast);
+}
+.guide .card__list li:last-child a { border-bottom: 0; }
+.guide .card__list a:hover { color: var(--black); padding-left: 0.3rem; }
+
+/* ─── Responsive ───────────────────────────────────────── */
+@media (max-width: 880px) {
+  .guide .shell { grid-template-columns: 1fr; gap: 0; padding: 0 1.25rem; }
+
+  /* section nav: a sticky switcher bar; the list drops as a floating panel.
+     The portal's .nav is not sticky, so nothing has to be unpinned here. */
+  .guide .guidenav {
+    position: sticky; top: 0; z-index: 15;
+    max-height: none; overflow: visible;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+  }
+  .guide .guidenav__summary {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; background: none; border: 0; text-align: left; cursor: pointer;
+    padding: 1.05rem 0; font: inherit; font-size: 0.95rem; font-weight: 600;
+    color: var(--black);
+  }
+  .guide .guidenav__chev { color: var(--gray-dark); transition: transform var(--t-fast); flex: none; }
+  .guide .guidenav__summary[aria-expanded="true"] .guidenav__chev { transform: rotate(180deg); }
+
+  .guide .sidebar { display: none; }
+  .guide .sidebar[data-open="true"] {
+    display: block;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+    max-height: 72vh; overflow-y: auto;
+    padding: 0.7rem 0 1.4rem;
+    columns: 2; column-gap: 1.5rem;
+  }
+  .guide .sidebar__group { margin-bottom: 1.1rem; break-inside: avoid; }
+  .guide .sidebar__link { margin-left: 0; padding-left: 0; }
+
+  .guide .main { padding: 1.75rem 0 3.5rem; }
+}
+
+/* very narrow phones: single column */
+@media (max-width: 420px) {
+  .guide .sidebar { columns: 1; }
+}
