@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
@@ -55,6 +56,9 @@ function OnboardingCompleteContent() {
             </a>
           </div>
 
+          <p className="help-line">
+            New to STREET? Read the <Link href="/guide">retailer guide</Link>.
+          </p>
           <p className="help-line">
             Need help? <a href="mailto:support@street.london">support@street.london</a>
           </p>
