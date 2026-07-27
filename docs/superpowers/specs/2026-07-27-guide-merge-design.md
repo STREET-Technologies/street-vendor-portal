@@ -80,12 +80,26 @@ CSS is BEM-ish (`.card__title`, `.sidebar__link`) and all prose rules are alread
 `.doc`, so the merge surface is small.
 
 - `.footer` — training rules deleted; the portal's `Footer` component is used.
-- `.hero` — renamed `.guide-hero`.
+- `.hero` — renamed `.guide-hero`. Note the direction of this hazard: the funnel's `.hero` is
+  *unscoped*, so it would leak **into** the guide even though the guide's own rules are scoped.
+  Scoping protects the funnel; only the rename protects the guide.
+- `.topnav*` rules — deleted; the portal's `Nav` is used. The mobile rule
+  `.topnav { position: static; }` is not needed: the portal's `.nav` is a plain border-bottom bar,
+  not sticky, which is what the guide's sticky mobile switcher requires.
 - Base resets (`html`, `body`, `a`, `button`) — deleted; `globals.css` already has them.
 - The duplicate `:root` token block — deleted. Colours and fonts keep one definition.
-- Four guide-local tokens (`--content-w`, `--sidebar-w`, `--watch`, `--missing`) move onto the
-  `.guide` wrapper class rather than `:root`, since they are layout dimensions and callout colours
-  that only the guide uses.
+- Two guide-local tokens (`--sidebar-w`, `--content-w`) move onto the `.guide` wrapper rather than
+  `:root`, since they are layout dimensions only the guide uses.
+
+Two measurements have to be reconciled, since the guide and the funnel were built to different
+scales:
+
+- Shell width. The guide's `.shell` is `78rem` (1248px); the portal's `.container` is 1120px.
+  Merged, the nav and footer would be visibly narrower than the guide content. `.guide .shell`
+  adopts the portal's 1120px and its `0 2rem` / `0 1.25rem` gutters so all three align.
+- Body scale. `globals.css` sets `15px / 1.6` for the funnel; the guide's editorial rhythm was
+  designed at `16px / 1.65`. Most guide sizes are `rem` and so are unaffected, but line-height is
+  inherited, so `.guide` restates `font-size: 16px; line-height: 1.65`.
 
 Every rule in `guide.css` nests under a `.guide` root class. Importing a stylesheet in a layout
 does not scope it in the App Router — Next.js chunks CSS by route, but once loaded during a
