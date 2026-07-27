@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import { GUIDE_BASE } from "./guide-base";
 
 // ── Model ────────────────────────────────────────────────────────────────
 // Folders are the navigation. A two-digit prefix (00-, 01-) sets section order
@@ -10,9 +11,11 @@ import { marked } from "marked";
 
 const CONTENT_DIR = join(process.cwd(), "content");
 
-// Every guide URL is built from this. The guide is mounted at /guide inside the
-// onboarding site; nothing else may hardcode that prefix.
-export const GUIDE_BASE = "/guide";
+// Every guide URL is built from this. Re-exported so existing `@/lib/content`
+// importers keep working; the canonical definition lives in ./guide-base
+// (which has no Node-only imports, so client components and next.config.ts
+// can import it too). Nothing else may hardcode the prefix.
+export { GUIDE_BASE };
 
 export type Doc = {
   slug: string[]; // url segments, e.g. ["getting-set-up","finishing-your-setup"]

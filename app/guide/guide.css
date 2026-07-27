@@ -2,7 +2,13 @@
    Every selector is scoped to .guide so guide CSS can never reach the
    onboarding funnel after a client-side navigation.
    Colours, fonts and motion come from globals.css :root — never redefine them
-   here. Only guide-local layout dimensions live on .guide below. */
+   here. Only guide-local layout dimensions live on .guide below.
+
+   Reverse hazard: globals.css selectors are UNSCOPED, so a funnel rule using one
+   of these names would reach into the guide. Names claimed by the guide: card,
+   card__*, cards, content, doc, doc-head, lead, main, shell, crumbs, meta-row,
+   updated, sidebar*, guidenav*, wikilink*. (This is how .hero bit us — hence
+   guide-hero.) */
 
 .guide {
   --sidebar-w: 17rem;
@@ -119,8 +125,17 @@
   font-size: 1.08rem; font-weight: 700;
   margin: 1.8rem 0 0.6rem;
 }
+.guide .doc h4 {
+  font-size: 0.98rem; font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+}
 .guide .doc p { margin: 0 0 1.05rem; }
 .guide .doc strong { font-weight: 700; }
+/* Tailwind preflight (pulled in by globals.css) sets `ol, ul, menu { list-style: none }`.
+   The guide's CSS came from a repo with no Tailwind, where UA markers applied.
+   Restore them; the checkbox rule further down opts GFM task lists back out. */
+.guide .doc ul { list-style: disc; }
+.guide .doc ol { list-style: decimal; }
 .guide .doc ul, .guide .doc ol { margin: 0 0 1.15rem; padding-left: 1.3rem; }
 .guide .doc li { margin: 0.4rem 0; padding-left: 0.2rem; }
 .guide .doc li::marker { color: var(--gray); }
