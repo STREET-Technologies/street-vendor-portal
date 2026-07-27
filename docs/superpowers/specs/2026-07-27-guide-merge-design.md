@@ -35,7 +35,7 @@ Hanson + Barlow), so this is a structural merge, not a redesign.
 
 | From `street-training-site` | To `street-vendor-portal` |
 | --- | --- |
-| `content/` (36 markdown files) | `content/` |
+| `content/` (24 markdown files) | `content/` |
 | `lib/content.ts` | `lib/content.ts` |
 | `scripts/sync-content.mjs`, `scripts/add-order.mjs` | `scripts/` |
 | `app/page.tsx` | `app/guide/page.tsx` |

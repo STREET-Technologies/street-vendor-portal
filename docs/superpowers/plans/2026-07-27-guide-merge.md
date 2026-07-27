@@ -30,7 +30,7 @@
 | --- | --- |
 | `lib/content.ts` | Reads `content/`, builds the doc index, resolves wiki-links, renders markdown. Exports `GUIDE_BASE`. |
 | `lib/content.test.ts` | Unit tests for href construction, nav ordering, wiki-link resolution, markdown transforms. |
-| `content/` | Synced markdown (36 files). Generated, never hand-edited. |
+| `content/` | Synced markdown (24 files). Generated, never hand-edited. |
 | `scripts/sync-content.mjs` | Copies numbered section folders from the vault into `content/`. |
 | `scripts/add-order.mjs` | Vault helper for writing `order:` frontmatter. |
 | `app/guide/layout.tsx` | Guide shell: imports `guide.css`, renders `Nav` + `.guide` wrapper + `Footer`. |
@@ -70,7 +70,7 @@ cp -R "$SRC/content" ./content
 cp "$SRC/lib/content.ts" ./lib/content.ts
 cp "$SRC/scripts/sync-content.mjs" "$SRC/scripts/add-order.mjs" ./scripts/
 ls content | head    # expect 00-Start-Here .. 07-Reference
-find content -name '*.md' | wc -l    # expect 36
+find content -name '*.md' | wc -l    # expect 24
 ```
 
 - [ ] **Step 2: Add dependencies and scripts**
@@ -150,7 +150,7 @@ describe("getNav", () => {
 describe("getAllSlugs", () => {
   it("returns slugs relative to the [...slug] route, without a guide segment", () => {
     const slugs = getAllSlugs();
-    expect(slugs.length).toBe(36);
+    expect(slugs.length).toBe(24);
     for (const slug of slugs) {
       expect(slug[0]).not.toBe("guide");
     }
@@ -801,7 +801,7 @@ export default async function DocPage({
 - [ ] **Step 6: Verify the build and static generation**
 
 Run: `npm run build`
-Expected: PASS. The output lists `/guide` and 36 prerendered `/guide/[...slug]` entries.
+Expected: PASS. The output lists `/guide` and 24 prerendered `/guide/[...slug]` entries.
 
 If the build reports `content` directory not found, confirm `CONTENT_DIR` resolves via `process.cwd()` and that `content/` sits at the repo root, not inside `app/`.
 
