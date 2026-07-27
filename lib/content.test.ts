@@ -1,5 +1,14 @@
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { GUIDE_BASE, getAllSlugs, getDoc, getNav } from "./content";
+
+const countMd = (dir: string): number =>
+  readdirSync(dir, { withFileTypes: true }).reduce((n, e) => {
+    if (e.name.startsWith("_") || e.name.startsWith(".")) return n;
+    if (e.isDirectory()) return n + countMd(join(dir, e.name));
+    return n + (e.name.endsWith(".md") ? 1 : 0);
+  }, 0);
 
 describe("GUIDE_BASE", () => {
   it("namespaces the guide under /guide", () => {
@@ -32,7 +41,7 @@ describe("getNav", () => {
 describe("getAllSlugs", () => {
   it("returns slugs relative to the [...slug] route, without a guide segment", () => {
     const slugs = getAllSlugs();
-    expect(slugs.length).toBe(24);
+    expect(slugs.length).toBe(countMd("content"));
     for (const slug of slugs) {
       expect(slug[0]).not.toBe("guide");
     }
