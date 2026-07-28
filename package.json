@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "vitest run && next build",
+    "build:only": "next build",
     "start": "next start",
     "lint": "eslint",
     "sync": "node scripts/sync-content.mjs",
