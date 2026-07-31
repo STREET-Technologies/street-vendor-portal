@@ -629,6 +629,10 @@ button { cursor: pointer; }
   background: var(--sand); color: var(--black);
   border: 1px solid var(--rule-mid);
 }
+.alert.alert-warning {
+  background: #fdf6e7; color: #6b4a08;
+  border: 1px solid rgba(180, 130, 20, 0.3);
+}
 .alert b { font-weight: 700; }
 
 /* ─── Responsive ───────────────────────────────────────── */
