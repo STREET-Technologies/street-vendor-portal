@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import Nav from "../_components/Nav";
 import Footer from "../_components/Footer";
 import OnboardingSidebar from "../_components/OnboardingSidebar";
+import { resolveAddressSource } from "@/lib/onboard-address";
 
 type OnboardOutlet = {
   id: string;
@@ -18,6 +19,8 @@ type OnboardOutlet = {
   address2: string | null;
   city: string | null;
   postcode: string | null;
+  country: string | null;
+  countryCode: string | null;
   isPrimary: boolean;
   isPublished: boolean;
 };
@@ -35,6 +38,7 @@ interface PartialVendorData {
   address?: string | null;
   city?: string | null;
   country?: string | null;
+  countryCode?: string | null;
   postcode?: string | null;
 }
 
@@ -265,6 +269,14 @@ export default function OnboardPage() {
       <span className="opt">from Shopify</span>
     ) : null;
 
+  // TT-396: which Shopify location fed the address prefill, and whether it
+  // needs the "not in the UK" warning. Follows the outlet picker selection.
+  const addressSource = resolveAddressSource(
+    outlets,
+    watch("primaryOutletId"),
+    partialVendor?.countryCode,
+  );
+
   // When the vendor selects a different outlet, prefill address/postcode from
   // that outlet. Only overwrites when the outlet HAS the value (never clears).
   // (city is not a standalone form field — it's embedded in the address line.)
@@ -474,8 +486,43 @@ export default function OnboardPage() {
                 {errors.phone && <span className="err">{errors.phone.message}</span>}
               </div>
 
+              {/* TT-396: STREET is UK-only and the prefill mirrors a Shopify
+                  LOCATION, not the Settings > General store address. Warn when
+                  that location is non-GB — the exact trap the Shopify reviewer
+                  hit with a Brazil demo store. Self-limiting: UK stores never
+                  see it. */}
+              {addressSource.isNonUk && (
+                <div className="fld full">
+                  <div className="alert alert-warning" role="alert" style={{ marginBottom: 0 }}>
+                    <span>
+                      <b>This address isn&apos;t in the UK.</b>{" "}
+                      STREET is a UK-only marketplace and orders are collected from{" "}
+                      {addressSource.locationName ? (
+                        <>your Shopify location <b>{addressSource.locationName}</b>, which is</>
+                      ) : (
+                        <>your store address, which is</>
+                      )}{" "}
+                      currently set to a non-UK country ({addressSource.countryCode}).
+                      Update the location&apos;s address in your Shopify admin under{" "}
+                      <b>Settings &gt; Locations</b> and it will sync here automatically
+                      (changing Settings &gt; General has no effect), or type the correct
+                      UK address below.
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div className="fld full">
-                <label htmlFor="address">Business address <span className="opt">where we collect orders from</span> {shopifyHint("address")}</label>
+                <label htmlFor="address">
+                  Business address <span className="opt">where we collect orders from</span>{" "}
+                  {prefilledFields.has("address") ? (
+                    <span className="opt">
+                      {addressSource.locationName
+                        ? `from your Shopify location "${addressSource.locationName}"`
+                        : "from Shopify"}
+                    </span>
+                  ) : null}
+                </label>
                 <input {...register("address")} id="address" type="text" placeholder="123 Main Street" aria-invalid={!!errors.address} />
                 {errors.address && <span className="err">{errors.address.message}</span>}
               </div>
