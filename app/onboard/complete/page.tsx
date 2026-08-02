@@ -2,9 +2,11 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
+import { GUIDE_BASE } from "@/lib/guide-base";
 
 // Build a deep link to the retailer's own Shopify admin from their store URL.
 // `gymshark-10024.myshopify.com` → `https://admin.shopify.com/store/gymshark-10024`.
@@ -71,6 +73,9 @@ function OnboardingCompleteContent() {
             </a>
           </div>
 
+          <p className="help-line">
+            New to STREET? Read the <Link href={GUIDE_BASE}>retailer guide</Link>.
+          </p>
           <p className="help-line">
             Need help? <a href="mailto:support@street.london">support@street.london</a>
           </p>

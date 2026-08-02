@@ -9,7 +9,12 @@
       "WebSearch",
       "WebFetch(domain:vercel.com)",
       "Bash(npm install)",
-      "Bash(npm audit:*)"
+      "Bash(npm audit:*)",
+      "Read(//Users/gunnar/git_repo/STREET/street-backend/src/**)",
+      "Bash(ssh -i ~/.ssh/gunnar-aws.pem -o StrictHostKeyChecking=no ubuntu@18.135.139.245 './deploy.sh backend-staging')",
+      "Bash(ssh -i ~/.ssh/gunnar-aws.pem -o StrictHostKeyChecking=no ubuntu@18.135.139.245 'cat ~/deploy.sh')",
+      "Bash(ssh -i ~/.ssh/gunnar-aws.pem -o StrictHostKeyChecking=no ubuntu@18.135.139.245 './deploy.sh backend-staging v5.2.15')",
+      "Bash(curl *)"
     ],
     "deny": [],
     "ask": []
