@@ -10,7 +10,11 @@ import { Loader2 } from "lucide-react";
 import Nav from "../_components/Nav";
 import Footer from "../_components/Footer";
 import OnboardingSidebar from "../_components/OnboardingSidebar";
-import { resolveAddressSource } from "@/lib/onboard-address";
+import {
+  resolveAddressSource,
+  resolveAddressValidationWarning,
+  type AddressValidationVerdict,
+} from "@/lib/onboard-address";
 
 type OnboardOutlet = {
   id: string;
@@ -23,6 +27,10 @@ type OnboardOutlet = {
   countryCode: string | null;
   isPrimary: boolean;
   isPublished: boolean;
+  // TT-397: courier-bookability check on the address. Additive — older
+  // backend responses simply omit these and no banner renders.
+  addressValidationVerdict?: AddressValidationVerdict;
+  addressValidatedAt?: string | null;
 };
 
 interface PartialVendorData {
@@ -545,6 +553,9 @@ export default function OnboardPage() {
                     {outlets.map((o) => {
                       const addressLine = [o.address, o.city, o.postcode].filter(Boolean).join(", ");
                       const isSelected = watch("primaryOutletId") === o.id;
+                      // TT-397: dispatch-blocking address problems, surfaced
+                      // per outlet using the TT-396 alert-warning pattern.
+                      const addressWarning = resolveAddressValidationWarning(o.addressValidationVerdict);
                       return (
                         <label key={o.id} className={`outlet-card${isSelected ? " selected" : ""}`}>
                           <input
@@ -560,6 +571,13 @@ export default function OnboardPage() {
                               {o.isPrimary && <span className="outlet-pill">Suggested</span>}
                             </span>
                             {addressLine && <span className="outlet-addr">{addressLine}</span>}
+                            {addressWarning && (
+                              <span className="alert alert-warning" role="alert" style={{ marginTop: "0.5rem" }}>
+                                <span>
+                                  <b>{addressWarning.headline}.</b> {addressWarning.body}
+                                </span>
+                              </span>
+                            )}
                           </span>
                         </label>
                       );

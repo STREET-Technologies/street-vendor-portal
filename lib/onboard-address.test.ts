@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { resolveAddressSource, type AddressSourceOutlet } from "./onboard-address";
+import {
+  resolveAddressSource,
+  resolveAddressValidationWarning,
+  type AddressSourceOutlet,
+} from "./onboard-address";
 
 // TT-396: the onboarding form's address is prefilled from a Shopify location
 // (mirrored via backend outlets), never from the Settings > General store
@@ -82,5 +86,28 @@ describe("resolveAddressSource", () => {
   it("treats country codes case-insensitively", () => {
     expect(resolveAddressSource([outlet({ countryCode: "gb" })], undefined, null).isNonUk).toBe(false);
     expect(resolveAddressSource([outlet({ countryCode: "br" })], undefined, null).isNonUk).toBe(true);
+  });
+});
+
+// TT-397: the courier-bookability check is a separate concern from the
+// TT-396 UK-only check above, but reuses its alert-warning banner pattern.
+describe("resolveAddressValidationWarning", () => {
+  it("warns on an invalid postcode", () => {
+    const warning = resolveAddressValidationWarning("invalid_postcode");
+    expect(warning?.headline).toBe("This location's address can't be used for courier deliveries");
+    expect(warning?.body).toMatch(/doesn't exist or is no longer in use/);
+  });
+
+  it("warns on a postcode mismatch with different copy", () => {
+    const warning = resolveAddressValidationWarning("postcode_mismatch");
+    expect(warning?.headline).toBe("This location's address can't be used for courier deliveries");
+    expect(warning?.body).toMatch(/don't appear to match/);
+  });
+
+  it("does not warn for valid, unknown, undefined or null verdicts", () => {
+    expect(resolveAddressValidationWarning("valid")).toBeNull();
+    expect(resolveAddressValidationWarning("unknown")).toBeNull();
+    expect(resolveAddressValidationWarning(undefined)).toBeNull();
+    expect(resolveAddressValidationWarning(null)).toBeNull();
   });
 });
