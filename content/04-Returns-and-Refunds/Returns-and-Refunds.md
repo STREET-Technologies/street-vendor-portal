@@ -2,7 +2,7 @@
 title: Returns and refunds
 order: 1
 audience: retailer
-updated: 2026-06-24
+updated: 2026-08-15
 ---
 
 # Returns and refunds
@@ -58,7 +58,15 @@ Sometimes refunding the delivery fee is the right thing to do. For example:
 - The item arrived faulty or not as described and you want to make it right.
 - A valued customer had a poor experience and you want to keep them.
 
-In those cases, tick it knowingly. Just understand the delivery fee is **money you are choosing to give**, not something the customer is owed. If you tick it and immediately regret it, contact STREET support (see [[Get-Help]]) and we will talk it through.
+In those cases, tick it knowingly. Just understand the delivery fee is **money you are choosing to give**. If you tick it and immediately regret it, contact STREET support (see [[Get-Help]]) and we will talk it through.
+
+## The one case where the customer is owed the delivery fee
+
+If a customer cancels a **whole order** for change of mind within 14 days of receiving it and sends everything back, UK consumer law (the Consumer Contracts Regulations 2013) says the seller refunds the basic delivery charge as well as the goods. On a STREET order the seller is you, so in that one case tick "Refund shipping" on purpose. STREET has still paid the rider and still bills you for that delivery; that is the cost of the sale falling through, the same as it would on your own website.
+
+This does **not** apply to a partial return (one item out of several comes back), to a change of mind after the 14 days, or to a return under your own longer policy. Those follow the default: items only.
+
+Customers are told in the STREET app, before they pay and on their order screen, that the delivery fee is not refunded once the order is on its way and that returns and refunds are handled by you, with a link to your returns policy. Keep that policy link filled in on your STREET listing so they land in the right place.
 
 ## FAQ
 
@@ -67,6 +75,9 @@ Your own return window and policy apply, the same as any other Shopify order. Se
 
 **What about a partial return, where only one item of several comes back?**
 Same rules. Refund the returned item only. Leave shipping unticked.
+
+**A customer is cancelling the whole order and sending everything back. Do I refund the delivery?**
+If it is within 14 days of them receiving it, yes: consumer law puts the basic delivery refund on you as the seller. Tick "Refund shipping" for that return. See the section above.
 
 **The item was faulty. Should I refund delivery?**
 That is your call. It is a reasonable goodwill gesture. Just tick "Refund shipping" knowing the fee comes from you.
