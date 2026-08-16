@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import Nav from "../_components/Nav";
 import Footer from "../_components/Footer";
 import OnboardingSidebar from "../_components/OnboardingSidebar";
+import { writeHandoff } from "@/lib/onboard-handoff";
 import {
   resolveAddressSource,
   resolveAddressValidationWarning,
@@ -335,7 +336,9 @@ export default function OnboardPage() {
       });
       const { email, tempPassword } = response.data.data;
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
-      const nextParams = new URLSearchParams({ email, temp: tempPassword, storeUrl: data.storeUrl });
+      // Credentials go via sessionStorage, never the URL (history / Referer / logs).
+      writeHandoff({ email, tempPassword });
+      const nextParams = new URLSearchParams({ storeUrl: data.storeUrl });
       window.location.href = `/change-password?${nextParams.toString()}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };

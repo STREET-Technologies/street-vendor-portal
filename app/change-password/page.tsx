@@ -10,6 +10,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import Nav from "../_components/Nav";
 import Footer from "../_components/Footer";
 import OnboardingSidebar from "../_components/OnboardingSidebar";
+import { readHandoff, writeHandoff } from "@/lib/onboard-handoff";
 
 function ChangePasswordForm() {
   const searchParams = useSearchParams();
@@ -29,10 +30,13 @@ function ChangePasswordForm() {
   });
 
   useEffect(() => {
-    const email = searchParams.get("email");
-    const tempPassword = searchParams.get("temp");
+    // Prefill from the same-tab handoff written by /onboard. The ?email= query
+    // param is still honoured because the signup email links here with it;
+    // the temporary password is never accepted from the URL.
+    const handoff = readHandoff();
+    const email = handoff?.email ?? searchParams.get("email");
     if (email) setValue("email", email);
-    if (tempPassword) setValue("tempPassword", tempPassword);
+    if (handoff?.tempPassword) setValue("tempPassword", handoff.tempPassword);
   }, [searchParams, setValue]);
 
   const onSubmit = async (data: ChangePasswordFormData) => {
@@ -44,10 +48,13 @@ function ChangePasswordForm() {
         tempPassword: data.tempPassword,
         newPassword: data.newPassword,
       });
-      const params = new URLSearchParams({ email: data.email, password: data.newPassword });
+      // Hand the new credentials to operating-hours via sessionStorage, not the URL.
+      writeHandoff({ email: data.email, password: data.newPassword });
+      const params = new URLSearchParams();
       const storeUrl = searchParams.get("storeUrl");
       if (storeUrl) params.set("storeUrl", storeUrl);
-      window.location.href = `/onboard/operating-hours?${params.toString()}`;
+      const qs = params.toString();
+      window.location.href = `/onboard/operating-hours${qs ? `?${qs}` : ""}`;
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       setSubmitError(
