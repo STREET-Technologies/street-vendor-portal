@@ -11,6 +11,7 @@ import {
   type OperatingHoursFormData,
 } from "@/lib/validations/operating-hours";
 import { apiClient } from "@/lib/api/client";
+import { readHandoff, clearHandoff } from "@/lib/onboard-handoff";
 import { Loader2, Copy, CheckCircle2 } from "lucide-react";
 import Nav from "../../_components/Nav";
 import Footer from "../../_components/Footer";
@@ -49,8 +50,11 @@ function OperatingHoursForm() {
   const mondayHours = watch("monday");
 
   useEffect(() => {
-    const email = searchParams.get("email");
-    const password = searchParams.get("password");
+    // Credentials arrive via the same-tab handoff from /change-password; the URL
+    // only carries storeUrl. Cleared once we hold a token.
+    const handoff = readHandoff();
+    const email = handoff?.email;
+    const password = handoff?.password;
 
     if (!email || !password) {
       setLoginError("Missing credentials. Please log in to continue.");
@@ -70,6 +74,7 @@ function OperatingHoursForm() {
           return;
         }
         setAuthToken(token);
+        clearHandoff();
         setIsLoggingIn(false);
       } catch (error: unknown) {
         const err = error as { response?: { data?: { message?: string } } };
@@ -81,7 +86,7 @@ function OperatingHoursForm() {
     };
 
     login();
-  }, [searchParams]);
+  }, []);
 
   const copyMondayToAll = () => {
     if (!mondayHours) return;
