@@ -42,14 +42,24 @@
 .guide .guidenav__summary { display: none; } /* desktop: list always shown */
 .guide .sidebar { display: block; padding: 2.25rem 0 3rem; }
 .guide .sidebar__group { margin-bottom: 1.65rem; }
+/* A button so mobile can accordion sections; inert on desktop. */
 .guide .sidebar__title {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--gray);
   margin: 0 0 0.55rem;
+  pointer-events: none;
 }
+.guide .sidebar__title-chev { display: none; }
 .guide .sidebar__list { list-style: none; margin: 0; padding: 0; }
 .guide .sidebar__link {
   display: flex;
@@ -312,16 +322,33 @@
     border-bottom: 1px solid var(--rule);
     box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
     max-height: 72vh; overflow-y: auto;
-    padding: 0.7rem 0 1.4rem;
-    columns: 2; column-gap: 1.5rem;
+    padding: 0.35rem 0 0.9rem;
   }
-  .guide .sidebar__group { margin-bottom: 1.1rem; break-inside: avoid; }
+
+  /* accordion: section labels only; tap to reveal a section's articles */
+  .guide .sidebar__group { margin-bottom: 0; border-bottom: 1px solid var(--rule); }
+  .guide .sidebar__group:last-child { border-bottom: 0; }
+  .guide .sidebar__title {
+    pointer-events: auto;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 0;
+    margin: 0;
+    color: var(--gray-dark);
+  }
+  .guide .sidebar__group[data-open="true"] .sidebar__title { color: var(--black); }
+  .guide .sidebar__title-chev {
+    display: block; flex: none;
+    color: var(--gray-dark);
+    transition: transform var(--t-fast);
+  }
+  .guide .sidebar__title[aria-expanded="true"] .sidebar__title-chev { transform: rotate(180deg); }
+  .guide .sidebar__list { display: none; }
+  .guide .sidebar__group[data-open="true"] .sidebar__list {
+    display: block;
+    padding-bottom: 0.7rem;
+  }
   .guide .sidebar__link { margin-left: 0; padding-left: 0; }
 
   .guide .main { padding: 1.75rem 0 3.5rem; }
-}
-
-/* very narrow phones: single column */
-@media (max-width: 420px) {
-  .guide .sidebar { columns: 1; }
 }
