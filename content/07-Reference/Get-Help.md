@@ -3,7 +3,6 @@ title: Get help
 order: 4
 audience: retailer
 updated: 2026-09-13
-status: draft
 ---
 
 # Get help
@@ -12,8 +11,10 @@ status: draft
 
 ## Contact STREET
 
-- In the Partner app, select **Chat**.
+- In the Partner app, select **Chat** to reach STREET support through Crisp.
 - If you cannot use the app, email [support@street.london](mailto:support@street.london).
+
+Chat support is normally available **9am–7pm (UK time), seven days a week**, including Saturday and Sunday.
 
 For a problem with an active order, say that it is live and describe what is stopping it progressing.
 
