@@ -2,32 +2,45 @@
 title: FAQ
 order: 3
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 ---
 
 # FAQ
 
-**In short:** Quick answers to the questions retailers ask most.
+**In short:** Quick routes to setup, order and billing answers.
 
-**I finished setup but nothing is live on STREET. Why?**
-Most often your products have not been chosen yet, or they are chosen but not published to your online store in Shopify. See [[Getting-Visible-On-STREET]].
+## Setup and availability
 
-**Where do I accept orders?**
-In the STREET Partner app. See [[Receiving-Orders]].
+**Setup is complete, but nothing appears on STREET.**
+Check the location's status and hours, then the product's Active status, On Street setting and stock at that branch. See [[Getting-Visible-On-STREET]].
 
-**How quickly does the order reach the customer?**
-STREET is same-day, often within an hour or two of the order, depending on the courier. The sooner you accept and pack, the better that runs.
+**Where do I change which products are offered?**
+Open Catalog in the STREET app inside Shopify, or in the Partner app. See [[Choosing-Your-Products]] for location and bulk-change behaviour.
 
-**Does STREET affect my Shopify POS or in-store sales?**
-No. POS keeps working as it does now. STREET is a separate channel that shares the same stock. See [[STREET-and-Your-Shopify-POS]].
+**Can I pause a shop or change its hours?**
+Yes. [[Your-Locations]] explains the controls and the account needed for each branch. Existing accepted orders still need attention.
 
-**A customer is returning an item. Do I refund the delivery fee?**
-There is no need to by default, and it is best not to tick "Refund shipping" just to clear a warning. See [[Returns-and-Refunds]].
+**Does a stock allocation reserve the remainder for counter sales?**
+No. It limits the quantity shown on STREET at a time, using the same Shopify inventory. See [[STREET-and-Your-Shopify-POS]].
 
-**Can I change my opening hours, or pause my shop?**
-Yes, any time, in the Partner app. You can pause when you are slammed and switch back on later.
+## Orders and returns
 
-**I have more than one shop. Do I set them all up at once?**
-You set up your main one first, and the others switch on when you are ready. See [[Your-Locations]].
+**Where do I accept and pack an order?**
+In the Partner app. Start with [[Accepting-Orders]], then [[Packing-and-Collection]].
 
-> Worth knowing: this list grows from the questions retailers actually ask. If something you needed is not here, tell us and it will likely end up on this page.
+**An item is unavailable after I accept.**
+Use REMOVE in the packing screen. If nothing can be supplied, cancel the order there. See [[Packing-and-Collection]] for the steps and refund check.
+
+**How quickly will delivery arrive?**
+STREET is a same-day service, with timing depending on the courier. Check [[Tracking-Deliveries]] for the order's actual progress.
+
+**Do I refund delivery when a customer returns something?**
+Check the return reason and what is owed; do not assume shipping is always retained or always refunded. See [[Returns-and-Refunds]].
+
+## Billing and help
+
+**How do I check a STREET charge or change the cap?**
+Use [[Reading-Your-Invoice]] to reconcile a charge and [[Caps-and-Alerts]] to complete a cap change.
+
+**Where do I contact STREET?**
+See [[Get-Help]] for Chat, email and what to include.

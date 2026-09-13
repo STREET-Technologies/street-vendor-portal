@@ -2,21 +2,30 @@
 title: Your locations
 order: 5
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 ---
 
 # Your locations
 
-**In short:** If you run more than one shop, each is its own collection point on STREET. You set up your main one first and switch the others on when you are ready.
+**In short:** Check the collection address, stock and hours for each shop, then control its availability in the Partner app.
 
-## How it works
+## Check the branch
 
-- During setup you choose your main location, the one riders collect from.
-- Your other shops are already known to STREET, taken from your Shopify locations, but they are not live until you switch them on.
-- You manage and switch on locations from the STREET Partner app.
+During setup, choose the location riders should collect from. Correct collection addresses in Shopify **Settings > Locations**, not the general business address.
 
-## What customers see
+Each live location has its own stock and hours. An order is collected from the branch it belongs to. In the catalogue, check the selected location before changing products or stock allocation; see [[Choosing-Your-Products]].
 
-Each live location appears to customers as its own nearby shop, with its own stock and opening hours. An order is collected from the location it was placed against (see [[How-STREET-Connects-To-Your-Store]]).
+If another Shopify location is missing or not ready to activate, contact [[Get-Help|support]] before directing orders there.
 
-> Worth knowing: a location being known to STREET is not the same as it being live. It only takes orders once you switch it on, so you can bring shops onto STREET at your own pace.
+## Pause or reopen
+
+In the Partner app:
+
+- **Single location:** open **ONLINE** and confirm **Pause store**. To resume, open **OFFLINE** and confirm **Reopen store**.
+- **Multiple locations:** open **Locations**, find the named branch and use its **Open / Paused** switch. Confirm the change.
+
+Check that the displayed status changed for the correct branch. Pausing stops new orders; keep attending to orders already accepted. Reopening still depends on the location's hours and other visibility checks in [[Getting-Visible-On-STREET]].
+
+## Change operating hours
+
+Open **Store** in the Partner app to edit operating hours. If you are using a multi-location owner account, sign in to the relevant location account to change that branch's hours. Check the saved hours before reopening.

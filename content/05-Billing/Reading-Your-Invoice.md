@@ -2,19 +2,35 @@
 title: Reading your invoice
 order: 2
 audience: retailer
-updated: 2026-07-11
+updated: 2026-09-13
 status: draft
 ---
 
 # Reading your invoice
 
-**In short:** Your STREET charges appear in your Shopify billing. This page walks through each line so nothing on it is a surprise.
+**In short:** Match each STREET usage charge to its order, then check the commission, delivery amount and any STREET credit.
 
-## What the lines mean
+## Check a charge
 
-- **Commission**: STREET's agreed share of a STREET sale.
-- **Delivery**: the rider cost for a STREET order, the same fee explained in [[How-Billing-Works]].
+1. Open your bill in Shopify's billing area and find the STREET app charges.
+2. Match the order reference to the order in Shopify or **ORDER HISTORY** in the Partner app.
+3. Check the goods supplied, agreed commission, delivery amount and any credit shown. [[How-Billing-Works]] explains charge timing and later adjustments.
 
-Both sit in Shopify billing next to your usual Shopify charges.
+## An illustrative order
 
-> Worth knowing: this page will show a real, labelled example once the first invoices are in. If a charge ever does not look right, [[Get-Help]] is the place to start.
+Assume £60 of goods supplied, an agreed commission of 10%, £9.99 delivery recovery and £5 of STREET credit:
+
+| Component | Amount |
+|---|---:|
+| Commission: £60 × 10% | £6.00 |
+| Delivery | £9.99 |
+| STREET credit | −£5.00 |
+| Total STREET usage charge | **£10.99** |
+
+These components can be combined in one order entry. This is an example, not a real invoice or a statement of your rates.
+
+## If the totals do not match
+
+The app's 30-day usage cycle can differ from your Shopify bill dates, so one app cycle can span two bills. Compare the dates as well as the totals. [Shopify explains app billing cycles here](https://help.shopify.com/en/manual/your-account/manage-billing/billing-charges/types-of-charges/third-party-charges/app-charges).
+
+For an unexplained charge, send [[Get-Help|support]] the order reference, bill date, amount and what you expected. Include any return or refund on that order.

@@ -2,30 +2,29 @@
 title: Getting the best from STREET
 order: 1
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 status: draft
 ---
 
 # Getting the best from STREET
 
-**In short:** A few things that make STREET run smoothly for you and your customers. Little of this is new if you already sell online. It mostly comes back to the one thing STREET changes: speed.
+**In short:** Start each shift with a working order device, accurate availability and someone responsible for incoming orders.
 
-## Speed is the difference
+## At the start of the shift
 
-You already know how to pack an order and hand it to a courier. STREET changes one thing: the customer is expecting it the same day, often within an hour or two of ordering, depending on the courier. Everything below comes back to that.
+- Check the correct location, hours and Online status. [[Your-Locations]] explains pausing and reopening.
+- Check alerts and volume on the counter device. See [[Setting-Up-Your-Counter-Tablet]].
+- Agree who is accepting and packing orders, especially when several staff devices are signed in.
 
-## What tends to work well
+## During the shift
 
-- Picking up new orders quickly. The sooner you accept, the sooner a rider can be on the way.
-- Keeping stock accurate, so a same-day order is one you can actually fulfil.
-- Clear photos and descriptions, since customers are deciding quickly.
-- A quick word to the customer if something is going to be delayed. People are forgiving when they are kept in the loop.
+- Keep Shopify inventory accurate, including the branch and variants supplying the order.
+- Respond within the acceptance window; pause new orders if the team cannot take more.
+- Record unavailable items in the packing screen. Mark ready only when the order is packed for handover. See [[Packing-and-Collection]].
+- Use [[Get-Help|Chat]] for a delivery problem and include the order reference.
 
-## Where retailers sometimes get caught out
+## Before closing or handing over
 
-- Orders left past the acceptance window. A missed order is cancelled, not passed on, so it is a sale lost outright.
-- Stock that has drifted out of date, leading to a same-day order that cannot be completed.
-- Going quiet when there is a hitch, which is what tends to turn a small issue into a complaint.
-- Refunding the delivery fee on a return without realising it comes out of your own pocket (see [[Returns-and-Refunds]]).
+Check live orders still needing attention. Pausing stops new orders, so it does not replace finishing an accepted order or arranging a staff handover.
 
-> Worth knowing: none of these are rules. They are simply the handful of things that, on a same-day service, tend to separate a smooth order from a frustrated customer.
+For product complaints or returns, use [[Customer-Service]] and [[Returns-and-Refunds]].

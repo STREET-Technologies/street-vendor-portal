@@ -2,22 +2,28 @@
 title: Caps and alerts
 order: 3
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 status: draft
 ---
 
 # Caps and alerts
 
-**In short:** Shopify puts a ceiling on how much can be billed through it each month, and you get a heads-up as you get close. It is routine, and you can raise the ceiling yourself.
+**In short:** Your cap limits STREET usage charges for the app's billing cycle. Check it in Billing and complete Shopify approval when you change it.
 
-## Why there is a cap
+## Check your remaining allowance
 
-Shopify requires a monthly maximum on app charges. It is a Shopify rule, not a STREET one. The cap is set high to begin with, so most shops will not come near it.
+In the STREET app inside Shopify, open **Billing**. Check **Monthly cap**, **Used this cycle** and **Remaining**.
 
-## What to do near the cap
+The cap is a maximum, not a fixed fee. It applies to the app's 30-day billing cycle, which may differ from a calendar month or your Shopify bill dates.
 
-- Shopify lets you know when you are getting close, well before you reach it.
-- Getting close simply means STREET is bringing you steady business.
-- You can raise the cap yourself in your Shopify admin, so orders keep flowing. STREET support can help if you would rather.
+## Change the cap
 
-> Worth knowing: reaching the cap is the only thing that would pause new STREET charges, so raising it when you get the heads-up keeps everything running.
+1. Under **Change your cap**, enter the amount in **New monthly cap**. It cannot be below usage already incurred.
+2. Select **Request approval on Shopify**.
+3. Complete Shopify's approval, then return to **Billing** and check the updated cap.
+
+Entering an amount does not complete the change until Shopify approval is finished.
+
+## If you reach the limit
+
+Charges above the approved cap cannot be added. Check remaining usage regularly rather than waiting for an alert. If approval fails or a billing problem remains, contact [[Get-Help|support]] with the message shown in Shopify.

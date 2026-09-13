@@ -2,25 +2,33 @@
 title: Get help
 order: 4
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 status: draft
 ---
 
 # Get help
 
-**In short:** Where to reach STREET when you need a hand.
+**In short:** Use Chat in the Partner app, or email support@street.london with the order or location you need help with.
 
-## Contact
+## Contact STREET
 
-- Email: support@street.london
-- [Add live chat, phone, and hours once confirmed.]
+- In the Partner app, select **Chat**.
+- If you cannot use the app, email [support@street.london](mailto:support@street.london).
 
-## Good moments to get in touch
+For a problem with an active order, say that it is live and describe what is stopping it progressing.
 
-- A delivery problem you cannot resolve on your side.
-- A charge you do not understand (see [[How-Billing-Works]]).
-- You refunded a delivery fee by mistake and want to talk it through (see [[Returns-and-Refunds]]).
+## Include these details
 
-Anything to do with the rider or the delivery itself is ours to sort, so do reach out rather than carry it yourself.
+- Store name and collection location.
+- Order number, if the problem concerns an order.
+- The status or error shown and what you expected to happen.
+- What you have already checked. A screenshot can help; leave out passwords and payment details.
 
-> Worth knowing: response times and the full list of ways to reach us will be confirmed before launch.
+For a billing query, include the bill date and amount. For a missing product, include its name, variant and location.
+
+## Useful checks while you wait
+
+- Order will not load: check the connection and use Retry or Refresh.
+- Products missing or checkout failing: [[Getting-Visible-On-STREET]].
+- Refund amount unclear: [[Returns-and-Refunds]].
+- Charge does not match the order: [[Reading-Your-Invoice]].
