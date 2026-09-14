@@ -2,33 +2,27 @@
 title: Getting visible on STREET
 order: 2
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 ---
 
 # Getting visible on STREET
 
-**In short:** A few things need to be true before your shop and products show up and can be bought on STREET. Most are on the Shopify side, and if you already sell online you likely have them set.
+**In short:** If your shop or products are missing, check the location and catalogue first. If products appear but checkout fails, check STREET shipping and billing separately.
 
-## What makes you visible
+## Shop or products missing
 
-For customers to find and buy from you on STREET:
+1. Check the correct location is listed, open for its saved hours and not paused. See [[Your-Locations]]. Contact support if it is not available to activate.
+2. In Shopify, check the product is **Active**, inventory is tracked and the relevant variant has stock at that location.
+3. In the STREET app's **Catalog**, check the location, **On Street** setting and stock allocation. See [[Choosing-Your-Products]].
+4. Check the product's STREET sales-channel availability. Publication to your own Online Store and availability on STREET are separate settings.
+5. If Shopify has newer product or stock information, use **Sync now** in the STREET app and recheck. If it is still missing, send [[Get-Help|support]] the product, variant and location.
 
-- Your products are chosen for STREET and published to your online store in Shopify (see [[Choosing-Your-Products]]).
-- Your stock is tracked in Shopify, so STREET can see what is available.
-- Your location is published on STREET and switched on.
-- Your shop is open according to the hours you set.
+## Products visible but checkout fails
 
-## The Shopify side
+In the STREET app inside Shopify, check:
 
-STREET uses your Shopify checkout, so two Shopify settings matter:
+- The store uses the supported UK/GBP setup, Shopify Payments and standard Shopify Checkout.
+- Billing approval is complete; see [[Installing-the-App]] and [[Caps-and-Alerts]].
+- The **STREET shipping** card says **Same-Day Delivery is configured**. If the rate is missing, use **Set up shipping rate** or **Re-create rate**, as shown, then recheck the status.
 
-- Shopify Payments is your payment method. STREET runs customers through Shopify's own checkout, so they pay through it the same as on your website.
-- Your checkout is the standard Shopify one, not redirected to an outside payment page.
-
-If you already take orders through your Shopify online store, these are almost certainly set already.
-
-## Switching your shop on and off
-
-You can pause your STREET shop whenever you need to, for example when you are short-staffed or near closing. While paused, customers do not see you on STREET and no new orders come in. Switch back on when you are ready. This is yours to control from the Partner app.
-
-> Watch out: the most common reason for "nothing is showing on STREET" is a product that is chosen for STREET but not published to your online store in Shopify. If it is hidden from your web store, STREET cannot see it either. Check there first.
+If checkout still fails, contact support with the message shown and the affected product/location. A visible product does not by itself confirm checkout is ready.

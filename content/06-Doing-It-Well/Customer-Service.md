@@ -2,22 +2,22 @@
 title: Customer service
 order: 2
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 status: draft
 ---
 
 # Customer service
 
-**In short:** Quick, honest communication goes a long way, and it helps to know when to bring STREET in. These are people discovering your shop through STREET, so the experience they remember is yours.
+**In short:** Handle questions about your products and returns, and bring STREET support in for courier, delivery or app problems.
 
-## What works well
+## If a customer contacts your shop
 
-- Replying reasonably quickly. Customers on a same-day service tend to expect answers at a similar pace.
-- A clear, friendly tone. You are representing your own shop here as much as STREET.
-- Keeping the customer in the loop if something goes wrong, rather than going quiet. A short, honest update usually settles a problem before it grows.
+Find the order in Shopify or **ORDER HISTORY** in the Partner app. Check what was supplied and the current delivery or return status before responding.
 
-## When to bring STREET in
+For a product question, explain what you can confirm and the next step. For a return or refund, follow [[Returns-and-Refunds]] and keep your customer-facing policy URL current.
 
-For anything to do with the delivery itself, or a problem you cannot resolve on your side, STREET support is there to help (see [[Get-Help]]).
+## If the problem is with delivery
 
-> Worth knowing: how you handle a tricky moment is often what turns a one-off buyer into a regular. They found you through STREET, but the experience they take away is yours.
+Open **Chat** in the Partner app and send the order number, location and the problem. STREET support can investigate the courier journey. Avoid promising an arrival or refund time that has not been confirmed.
+
+If the issue affects a live order and you cannot contact the customer, include that in your message to STREET. See [[Get-Help]] for the details to send.

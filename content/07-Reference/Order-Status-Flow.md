@@ -2,28 +2,38 @@
 title: Order status flow
 order: 2
 audience: retailer
-updated: 2026-07-11
+updated: 2026-09-13
 ---
 
 # Order status flow
 
-**In short:** The stages a STREET order moves through, from a customer placing it to it arriving. You drive the early stages, and STREET and the rider drive the rest.
+**In short:** Use the displayed order status to see whether the next action is yours, the courier's or STREET support's.
 
-## The usual path
+## Acceptance, packing and delivery
 
-1. **New**: a customer has placed the order. It is waiting for you to accept, within a short window.
-2. **Accepted**: you have taken the order and it is yours to pack.
-3. **In packing**: you are getting the items ready.
-4. **Ready for delivery**: packed and waiting for a rider to collect.
-5. **Out for delivery**: the rider has collected and is on the way to the customer.
-6. **Delivered**: the customer has the order.
+| Status | What it means |
+|---|---|
+| Awaiting Acceptance | The order is waiting for you to accept or decline within the short window. |
+| Accepted / In Packing | Prepare the order and record each item in the packing screen. |
+| Packed | The order has been marked ready. Check the delivery detail for courier progress. |
+| Waiting for Courier | Collection is pending. The delivery detail distinguishes finding a courier from one heading to the shop. |
+| In Route | The delivery is on its way to the customer. |
+| Delivered | Delivery has been recorded as complete. |
 
-## Other outcomes
+Follow [[Packing-and-Collection]] for your steps and [[Tracking-Deliveries]] to open the tracking view.
 
-- **Missed**: the order was not accepted in time, so it was cancelled. The customer is not charged (see [[Accepting-Orders]]).
-- **Declined**: you turned the order down, for example because an item had sold out. The customer is not charged.
-- **Cancelled**: the order was stopped, by you, the customer, or STREET.
+## Orders that do not complete normally
 
-You drive the order up to **Ready for delivery**. After that the rider and STREET carry it to the customer, and you can follow along (see [[Tracking-Deliveries]]).
+- **Missed:** the acceptance window expired and the order was cancelled.
+- **Declined:** you declined the incoming order.
+- **Cancelled:** the order was stopped. Open its details for the reason, where available.
+- **Returning to Store:** the courier could not complete delivery and is bringing the order back.
+- **Returned to Store:** the courier has brought the undelivered order back.
 
-> Worth knowing: the wording in the Partner app may read slightly differently here and there, but the order of things is the same. The two to watch are the early stages, where the order is waiting on you.
+For a cancelled or returned delivery, check the recorded payment/refund in Shopify before issuing another refund. Contact [[Get-Help|support]] if it is unclear.
+
+## Customer returns after delivery
+
+**Return Requested**, **Return in Progress**, **Partially Returned** and **Returned** describe the customer's merchandise return. They differ from a courier returning an undelivered order to the shop.
+
+A return status does not by itself confirm that a refund was issued. See [[Returns-and-Refunds]].

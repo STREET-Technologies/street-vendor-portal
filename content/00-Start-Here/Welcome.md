@@ -2,34 +2,30 @@
 title: Welcome to STREET
 order: 1
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 ---
 
 # Welcome to STREET
 
-**In short:** STREET brings nearby customers to your store and delivers their order the same day, often within an hour or two of ordering, depending on the courier. You pack it, a rider collects it, the customer has it within hours.
+**In short:** STREET helps nearby customers discover your shop and order for same-day delivery, with timing depending on courier availability.
 
-## How it works
+## How an order works
 
-A customer browsing STREET discovers your products and orders. The order lands with you. You accept it, pack it as you normally would, and mark it ready. A STREET rider collects from your store and takes it to the customer the same day.
+The order arrives in your STREET Partner app. You accept it, pack the items and mark it ready. STREET arranges a rider to collect from your shop and deliver to the customer.
 
-Nothing here replaces how you already work. You keep using Shopify, and STREET sits alongside it. What STREET adds is reach, customers nearby who might not have found you, and speed, same-day rather than next-day.
+You continue using Shopify for products, stock and your other sales. The Partner app is where you manage STREET orders and your location's availability.
 
-The flow, start to finish:
+## Get ready for your first order
 
-> Customer discovers you on STREET → order arrives in your STREET Partner app → you accept and pack → rider collects → delivered the same day
+1. [[Installing-the-App|Install STREET]] and [[Finishing-Your-Setup|finish your retailer setup]].
+2. [[Choosing-Your-Products|Review your products]] and [[Your-Locations|locations]].
+3. Work through the [[Going-Live-Checklist]] before going Online.
 
-## Getting going
+## Find help during a shift
 
-1. Finish setting up your store (a few minutes, see [[Finishing-Your-Setup]]).
-2. Choose which of your products appear on STREET (see [[Choosing-Your-Products]]).
-3. Take orders as they come in (see [[Receiving-Orders]]).
-
-## Quick links
-
-- New here? Start with the [[Going-Live-Checklist]].
-- First order coming in? See [[Accepting-Orders]].
-- A customer wants to return something? See [[Returns-and-Refunds]].
-- Question about a charge? See [[How-Billing-Works]].
-
-> Worth knowing: the one thing STREET changes is speed. Because it is same-day, the parts that make the biggest difference are picking up orders quickly and keeping your stock accurate.
+- New order: [[Accepting-Orders]].
+- Missing item or rider collection: [[Packing-and-Collection]].
+- Delivery progress: [[Tracking-Deliveries]].
+- Customer return: [[Returns-and-Refunds]].
+- A charge to check: [[Reading-Your-Invoice]].
+- Contact STREET: [[Get-Help]].

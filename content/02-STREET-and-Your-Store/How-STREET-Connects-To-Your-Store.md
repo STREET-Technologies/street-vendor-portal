@@ -2,23 +2,27 @@
 title: How STREET connects to your store
 order: 1
 audience: retailer
-updated: 2026-06-25
+updated: 2026-09-13
 ---
 
 # How STREET connects to your store
 
-**In short:** Once the STREET app is installed, it reads your products, stock and locations from Shopify, sends you the orders customers place, and bills through Shopify. Your normal Shopify setup keeps working as it is.
+**In short:** Shopify supplies your products and stock; the Partner app handles STREET orders; STREET charges appear in Shopify billing.
 
-## What STREET reads
+## Products and store details
 
-STREET looks at your Shopify store for the things it needs to show customers and route orders: your products with their images and prices, your stock levels, and your store locations. It reads these from Shopify directly, so what customers see on STREET stays in step with your store. There is no separate STREET catalogue to build or maintain.
+Maintain products, variants, prices and inventory in Shopify. STREET syncs that information, so you do not need a second catalogue. Use [[Choosing-Your-Products|On Street settings]] to control what you offer.
 
-## What STREET adds
+If product information looks stale, open the STREET app in Shopify and use **Sync now**. For old branding or contact details, use **Re-sync store details** instead and look for **Store details re-synced**. Then check the updated details. Collection addresses come from Shopify **Settings > Locations**.
 
-When a customer orders on STREET, the order is created in Shopify and sent to you in the STREET Partner app, the same as any order would land in your admin. Once it is delivered, STREET marks it fulfilled in Shopify with the tracking. STREET also handles its charges through Shopify's own billing, so there is no separate invoice to deal with (see [[How-Billing-Works]]).
+## Orders and delivery
 
-## What stays the same
+STREET orders appear in Shopify and in the Partner app. Accept, pack and mark them ready in the Partner app. Marking ready starts the courier-booking process and can mark the supplied items fulfilled in Shopify before delivery.
 
-Nothing about your existing setup changes. You keep using Shopify, and Shopify POS if you have it, exactly as you do now. STREET sits alongside them as another way for nearby customers to find and buy from you. Your part in a STREET order ends where it always does: once it is packed and handed to the rider.
+Use Partner app tracking to check whether the rider has collected or delivered the order. Shopify's fulfilled status is not proof of physical delivery. See [[Tracking-Deliveries]].
 
-> Worth knowing: because STREET reads straight from Shopify, keeping your Shopify products and stock tidy is most of what keeps STREET running smoothly. Get that right and the rest looks after itself.
+## What the integration adds
+
+STREET publishes eligible products to its sales channel and adds delivery configuration for STREET checkout. You can continue using Shopify and POS for your other sales.
+
+STREET manages the courier delivery; you still handle product questions and customer returns. [[How-Billing-Works]] explains the separate STREET charges collected through Shopify.

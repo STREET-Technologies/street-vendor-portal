@@ -2,21 +2,23 @@
 title: Receiving orders
 order: 1
 audience: retailer
-updated: 2026-07-16
+updated: 2026-09-13
 ---
 
 # Receiving orders
 
-**In short:** New STREET orders arrive in the STREET Partner app. That is where you accept them and work them through to collection.
+**In short:** Open STREET orders in the Partner app to accept, pack and prepare them for collection.
 
-## Where orders show up
+## Open an order
 
-- The STREET Partner app is your home for live orders, and you get a notification when one comes in.
-- The order also appears in your Shopify admin, the same as any order would.
-- You work the order from the Partner app, where the accept, pack and ready steps live.
+Keep the Partner app open during your operating hours, with alerts checked as described in [[Setting-Up-Your-Counter-Tablet]]. A new order appears with the items and variants requested.
 
-## The shape of an order
+Open the incoming order and follow [[Accepting-Orders]]. For orders already in progress, open **Orders > LIVE ORDERS** and select the order.
 
-A new order shows what the customer bought, so you can see at a glance what to pick. From there it is accept, pack, mark ready, and a rider collects (see [[Accepting-Orders]] and [[Packing-and-Collection]]).
+The order also appears in Shopify, but the STREET acceptance and packing controls are in the Partner app.
 
-> Worth knowing: the app does its best alerting on an always-on tablet by the till, with notifications on (see [[Setting-Up-Your-Counter-Tablet]]). A new order is waiting on you to accept it.
+## Find an older order
+
+Open **Orders > ORDER HISTORY** and use **Search history**. Select the order to see its details and status.
+
+If an order fails to load, check your connection and use **Retry** or **Refresh**, as shown. Contact [[Get-Help|support]] if it still will not load.

@@ -2,22 +2,24 @@
 title: Glossary
 order: 1
 audience: retailer
-updated: 2026-07-11
+updated: 2026-09-13
 ---
 
 # Glossary
 
-**In short:** Plain definitions of the words you will see around STREET.
+**In short:** The terms used in the Partner app, Shopify integration and this guide.
 
-- **STREET Partner app**: the app where you accept orders, pack them, mark them ready, and manage your hours and locations.
-- **Setup**: the one-time form you complete after installing the app.
-- **Acceptance window**: the short time you have to accept a new order. Miss it and the order is marked missed and cancelled (see [[Accepting-Orders]]).
-- **Operating hours**: the hours you have told STREET you can pack and hand over orders.
-- **Location**: one of your shops that STREET can collect orders from. Each is its own storefront to customers (see [[Your-Locations]]).
-- **Choosing your products**: picking which of your Shopify products appear on STREET, done in your Shopify admin (see [[Choosing-Your-Products]]).
-- **Rider**: the courier who collects an order from you and delivers it to the customer.
-- **Delivery fee**: the cost of the rider for an order. It is not your earnings (see [[How-Billing-Works]]).
-- **Commission**: STREET's agreed share of a STREET sale.
-- **Cap**: the monthly ceiling Shopify puts on billing, with a heads-up as you near it (see [[Caps-and-Alerts]]).
+- **STREET Partner app:** where you accept and pack orders, follow delivery, manage location availability and contact support.
+- **STREET app in Shopify:** where you connect your Shopify store, manage catalogue settings and approve STREET billing.
+- **Acceptance window:** the short time available to respond to an incoming order. An unanswered order is marked missed and cancelled. See [[Accepting-Orders]].
+- **Operating hours:** when the location is available to accept, pack and hand over orders.
+- **Location:** a shop with its own collection address, stock and hours. See [[Your-Locations]].
+- **On Street:** a product setting controlling whether it is offered on STREET, subject to stock and other visibility checks.
+- **Stock allocation:** a limit on the quantity shown for a variant at a time, using shared Shopify stock. See [[STREET-and-Your-Shopify-POS]].
+- **Rider:** the courier collecting and delivering an order.
+- **Delivery fee:** the customer's delivery payment. STREET's delivery charge to the retailer is accounted for separately. See [[How-Billing-Works]].
+- **Commission:** STREET's agreed share of the goods supplied.
+- **STREET credit:** an order contribution absorbed by STREET through a reduced usage charge, where applicable.
+- **Cap:** the approved maximum for STREET usage charges in the app's billing cycle. See [[Caps-and-Alerts]].
 
-> Worth knowing: if a word in the app or this guide is not clear, [[Get-Help]] can point you the right way.
+For order and return labels, see [[Order-Status-Flow]].
