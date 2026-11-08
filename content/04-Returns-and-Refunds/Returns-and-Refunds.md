@@ -2,7 +2,7 @@
 title: Returns and refunds
 order: 1
 audience: retailer
-updated: 2026-09-13
+updated: 2026-09-14
 status: draft
 ---
 
@@ -38,7 +38,7 @@ See [Shopify's return instructions](https://help.shopify.com/en/manual/fulfillme
 
 A customer refund and a STREET billing adjustment are separate. Commission on a delivered order is not automatically reversed when goods are later returned. Refunding the customer's delivery payment does not itself reverse a STREET delivery charge. See [[How-Billing-Works]].
 
-For example, assume £48 of goods, £9.99 delivery, 10% commission, no STREET credit and an original STREET charge of £14.79. An items-only refund of £48 leaves £4.80 of commission as a cost. Refunding £57.99 instead adds £9.99 to that cost. This illustrates the difference; it does not decide which refund is due or set your agreed rate.
+For example, assume £48 of goods, £9.99 delivery, 15% commission, no STREET credit and an original STREET charge of £17.19. An items-only refund of £48 leaves £7.20 of commission as a cost. Refunding £57.99 instead adds £9.99 to that cost. This illustrates the difference; it does not decide which refund is due or set your agreed rate.
 
 ## If a courier brings an order back
 

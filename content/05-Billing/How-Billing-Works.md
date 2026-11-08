@@ -2,7 +2,7 @@
 title: How billing works
 order: 1
 audience: retailer
-updated: 2026-09-13
+updated: 2026-09-14
 status: draft
 ---
 
@@ -12,7 +12,7 @@ status: draft
 
 ## What makes up a charge
 
-- **Commission:** STREET's agreed share of the goods supplied. Items removed during packing are excluded.
+- **Commission:** STREET's standard rate is 15% of the goods supplied, unless a different rate has been agreed for your shop. Items removed during packing are excluded.
 - **Delivery:** the delivery amount STREET recovers under your agreement.
 - **STREET credit:** where STREET contributes credit to an order, it reduces the usage charge.
 

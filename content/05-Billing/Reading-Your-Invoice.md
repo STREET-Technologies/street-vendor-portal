@@ -2,7 +2,7 @@
 title: Reading your invoice
 order: 2
 audience: retailer
-updated: 2026-09-13
+updated: 2026-09-14
 status: draft
 ---
 
@@ -18,14 +18,14 @@ status: draft
 
 ## An illustrative order
 
-Assume £60 of goods supplied, an agreed commission of 10%, £9.99 delivery recovery and £5 of STREET credit:
+Assume £60 of goods supplied, the standard commission of 15%, £9.99 delivery recovery and £5 of STREET credit:
 
 | Component | Amount |
 |---|---:|
-| Commission: £60 × 10% | £6.00 |
+| Commission: £60 × 15% | £9.00 |
 | Delivery | £9.99 |
 | STREET credit | −£5.00 |
-| Total STREET usage charge | **£10.99** |
+| Total STREET usage charge | **£13.99** |
 
 These components can be combined in one order entry. This is an example, not a real invoice or a statement of your rates.
 
